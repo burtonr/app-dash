@@ -8,6 +8,7 @@ class AuthHandlers {
     }
     
     hashPassword = (pwd) => {
+        // DEV: This is copied in ./initialize.js!
         bcrypt.hashSync(pwd, 8)
     }
 
