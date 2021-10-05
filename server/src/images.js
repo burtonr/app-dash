@@ -2,21 +2,21 @@ const axios = require('axios');
 const sharp = require('sharp');
 
 module.exports = {
-    downloadAndResize: function (imageUrl) {
-        axios
-            .get(imageUrl)
-            .then((res) => {
-                console.log('Got the image');
-                return res.data
-            })
-            .then((img) => {
-                console.log('resizing...');
-                sharp(img)
-                .resize(40, 40)
-            })
-            .catch((err) => {
-                console.error('Failed to retrieve image');
-                console.error(err);
-            });
+    downloadAndResize: async function (imageUrl) {
+        try {
+            let imgRes = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+            if (!imgRes.data) {
+                console.error('Failed to download image');
+                return;
+            } else {
+                let imgBuf = Buffer.from(imgRes.data, 'binary')
+                return sharp(imgBuf)
+                        .resize(40, 40)
+                        .toBuffer({ resolveWithObject: true });
+            }
+        } catch (err) {
+            console.error('Failed to retrieve image');
+            console.error(err);
+        }
     }
 }
