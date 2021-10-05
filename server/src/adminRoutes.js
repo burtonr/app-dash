@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const ObjectId = require('mongodb').ObjectId;
 const dbo = require('./datastore');
+const img = require('./images');
 
 module.exports = function(authHandler) {
     router.use(authHandler.verifyMiddleware);
@@ -24,19 +25,21 @@ module.exports = function(authHandler) {
             });
     });
     
-    router.post('/', (req, res) => {
+    router.post('/', async (req, res) => {
         let db_connect = dbo.getDataStore();
 
-        console.log('Request Body:');
-        console.log(req.body);
-        console.log('Request Title:');
-        console.log(req.body.title);
+        let smImg;
+
+        if (req.body.imageUrl) {
+            smImg = await img.downloadAndResize(req.body.imageUrl);
+        }
 
         let newItem = {
             title: req.body.title,
             description: req.body.description,
             url: req.body.url,
             imageUrl: req.body.imageUrl,
+            image: smImg,
         };
         db_connect
             .collection('apps')
@@ -45,11 +48,14 @@ module.exports = function(authHandler) {
                 res.json(cmdRes);
             });
     });
-    router.put('/:itemId', (req, res) => {
+    router.put('/:itemId', async (req, res) => {
         let db_connect = dbo.getDataStore();
 
-        console.log('Request:');
-        console.log(req.body.title);
+        let smImg;
+
+        if (req.body.imageUrl) {
+            smImg = await img.downloadAndResize(req.body.imageUrl);
+        }
 
         let newvalues = {
             $set: {
@@ -57,6 +63,7 @@ module.exports = function(authHandler) {
                 description: req.body.description,
                 url: req.body.url,
                 imageUrl: req.body.imageUrl,
+                image: smImg,
             },
         };
         db_connect

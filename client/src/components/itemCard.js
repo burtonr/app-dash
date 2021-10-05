@@ -27,7 +27,8 @@ const ItemCard = (props) => {
                     title={props.item.title}
                     subheader={props.item.description}
                     avatar={
-                        <Avatar aria-label="icon" src={props.item.imageUrl} />
+                        // TODO: Check the image type/format && check for missing image (default?)
+                        <Avatar aria-label="icon" src={`data:image/png;base64,${props.item.image.data}`} />
                     }
                 />
             </CardActionArea>
