@@ -9,12 +9,24 @@ import {
     IconButton,
 } from "@mui/material";
 
-import { Edit, Delete } from '@mui/icons-material';
+import { Delete, Edit, Label } from '@mui/icons-material';
 import auth from '../services/auth';
 
 const ItemCard = (props) => {
     const isManaged = useLocation().search === '?manage';
     const isAdmin = auth.isLoggedIn();
+    let itemAvatar = (<Avatar><Label /></Avatar>)
+
+    if (props.item.image || props.item.imageUrl) {
+        const avatarSrc = 
+            props.item.image ? 
+                `data:image/${props.item.image.info.format};base64,${props.item.image.data}` :
+                props.item.imageUrl
+        itemAvatar = (<Avatar
+            aria-label="icon"
+            src={avatarSrc}
+        />)
+    }
 
     return (
         <Card variant="outlined" sx={{ minWidth: 225, maxWidth: 300 }}>
@@ -26,10 +38,7 @@ const ItemCard = (props) => {
                 <CardHeader
                     title={props.item.title}
                     subheader={props.item.description}
-                    avatar={
-                        // TODO: Check the image type/format && check for missing image (default?)
-                        <Avatar aria-label="icon" src={`data:image/png;base64,${props.item.image.data}`} />
-                    }
+                    avatar={itemAvatar}
                 />
             </CardActionArea>
             {isAdmin && isManaged ? <CardActions disableSpacing >
