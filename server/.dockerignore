@@ -1,0 +1,7 @@
+src/node_modules
+src/npm-debug.log
+Dockerfile
+.dockerignore
+readme.md
+config/*.json
+!config/docker.json
