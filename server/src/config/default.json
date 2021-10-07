@@ -3,7 +3,7 @@
         "port": 8080,
         "authorize": false,
         "adminPass": "",
-        "jwtSecret": ""
+        "jwtSecret": "someSecret"
     },
     "mongo": {
         "connection": ""
