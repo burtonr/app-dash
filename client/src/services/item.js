@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../config/default.json';
 
-const API_URL = 'http://localhost:8080/';
+const API_URL = `${config.server.URI}`
 
 const getAllItems = () => {
     return axios.get(API_URL);

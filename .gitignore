@@ -15,7 +15,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Client
-client/public
+client/src/config/*.json
+!client/src/config/default.json
 
 # testing
 client/coverage

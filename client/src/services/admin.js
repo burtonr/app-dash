@@ -1,7 +1,8 @@
 import axios from 'axios';
 import authHeader from './authHeader';
+import config from '../config/default.json';
 
-const API_URL = 'http://localhost:8080/admin';
+const API_URL = `${config.server.URI}/admin`
 // axios.create({baseUrl: API_URL}) wasn't working as expected
 const authConfig = {
     headers: authHeader()
