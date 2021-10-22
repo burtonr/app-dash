@@ -1,0 +1,12 @@
+{
+    "appDash": {
+        "port": 8080,
+        "clientHost": "http://127.0.0.1:3000",
+        "authorize": true,
+        "adminPass": "someSecret",
+        "jwtSecret": "someSecret"
+    },
+    "mongo": {
+        "connection": "mongodb://mongo:secretPassword@mongo"
+    }
+}
