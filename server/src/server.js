@@ -21,6 +21,13 @@ const app = express();
 // TODO: Separate app and server
 // https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/projectstructre/separateexpress.md
 app.use(express.json());
+// const corsOptions = {
+//     origin: '*',
+//     // origin: appDashConfig.clientHost,
+//     optionsSuccessStatus: 200,
+//     methods: ['GET', 'POST', 'PUT']
+// }
+// app.use(cors(corsOptions));
 app.use(cors());
 app.use(helmet());
 app.use(session({
@@ -52,4 +59,5 @@ app.listen(appDashConfig.port, () => {
         initialize(appDashConfig);
     });
     console.info(`Listening on port ${appDashConfig.port}`);
+    console.info('UPDATED');
 })
