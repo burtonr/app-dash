@@ -1,5 +1,5 @@
 {
     "server": {
-        "URI": "http://api"
+        "URI": "http://localhost:9090"
     }
 }
