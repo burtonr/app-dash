@@ -59,29 +59,32 @@ export default class ItemGrid extends Component {
     itemList() {
         return this.state.items.map((currentItem) => {
             return (
-                <ItemCard
-                    item={currentItem}
-                    editClick={(x) => this.editItem(x) }
-                    deleteClick={(x) => this.deleteItem(x)}
-                    key={currentItem._id}
-                />
+                <Grid item xs>
+                    <ItemCard
+                        item={currentItem}
+                        editClick={(x) => this.editItem(x) }
+                        deleteClick={(x) => this.deleteItem(x)}
+                        key={currentItem._id}
+                    />
+                </Grid>
             );
         })
     }
 
     render() {
         return (
-            <Box>
+            <Box m="auto"
+                display="flex"
+                width="80%"
+                alignItems="center"
+                justifyContent="center"
+            >
                 <Grid container
                     direction="row"
-                    justifyContent="center"
-                    alignItems="center"
                     spacing={{ xs: 2, md: 3 }}
                     columns={{ xs: 4, sm: 8, md: 12 }}
                 >
-                    <Grid item xs>
-                        {this.itemList()}
-                    </Grid>
+                    {this.itemList()}
                 </Grid>
                 <EditDialog 
                     isOpen={this.state.editIsOpen}
