@@ -50,6 +50,42 @@ The App-Dash and MongoDB configuration is set in the `server/src/config/default.
 }
 ```
 
+### Client Configuration
+> Work In Progress
+
+Currently, the client configuration is hard-coded to read from `client/src/config/default.json`.
+
+The config values include the URL to the server when making API requests
+
+```json
+{
+    "server": {
+        "URI": "http://localhost:8080"
+    }
+}
+```
+
+### All Inclusive with Compose
+To start and run the full App Dash with server and database, simply run the `docker-compose` file
+
+```shell
+docker-compose up
+```
+
+This will build the containers from source if the images do not already exist. The MongoDB database container does not include a mounted volume, so all the data will be deleted when the container is removed. If you wish to keep your data, add the following line to the `docker-compose.yml` file:
+
+```yaml
+mongo:
+    image: mongo:5.0
+    restart: always
+# Add volumes section
+    volumes:
+      - ./data:/data/db
+# Remaining existing file below
+    environment:
+        ...
+```
+
 ## Development
 
 ### Libraries and Packages
