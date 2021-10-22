@@ -1,0 +1,39 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:5.0
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: secretPassword
+    networks:
+      - backend
+  api:
+    image: app-dash-api:latest
+    build:
+      context: ./server
+    restart: always
+    expose:
+      - 80
+    ports:
+      - "9090:8080"
+    depends_on:
+      - mongo
+    networks:
+      - backend
+      - frontend
+  client:
+    image: app-dash-client:latest
+    build:
+      context: ./client
+    restart: always
+    depends_on:
+      - api
+    ports:
+      - "8090:80"
+    networks:
+      - frontend
+networks:
+  backend:
+  frontend:
+

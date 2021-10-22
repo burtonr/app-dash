@@ -1,0 +1,11 @@
+{
+    "appDash": {
+        "port": 8080,
+        "authorize": true,
+        "adminPass": "someSecret",
+        "jwtSecret": "someSecret"
+    },
+    "mongo": {
+        "connection": "mongodb://mongo:secretPassword@mongo"
+    }
+}

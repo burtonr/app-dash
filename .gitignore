@@ -17,6 +17,7 @@ yarn-error.log*
 # Client
 client/src/config/*.json
 !client/src/config/default.json
+!client/src/config/docker.json
 
 # testing
 client/coverage
@@ -27,3 +28,4 @@ client/build
 # Server
 server/src/config/*.json
 !server/src/config/default.json
+!server/src/config/docker.json
