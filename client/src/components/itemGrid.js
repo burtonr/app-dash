@@ -78,6 +78,7 @@ export default class ItemGrid extends Component {
                 width="80%"
                 alignItems="center"
                 justifyContent="center"
+                paddingTop="10px"
             >
                 <Grid container
                     direction="row"
