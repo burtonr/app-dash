@@ -15,6 +15,7 @@ import auth from '../services/auth';
 const ItemCard = (props) => {
     const isManaged = useLocation().search === '?manage';
     const isAdmin = auth.isLoggedIn();
+    const cardHeight = isManaged ? 125 : 75;
     let itemAvatar = (<Avatar><Label /></Avatar>)
 
     if (props.item.image || props.item.imageUrl) {
@@ -29,7 +30,7 @@ const ItemCard = (props) => {
     }
 
     return (
-        <Card variant="outlined" sx={{ minWidth: 225, maxWidth: 300 }}>
+        <Card variant="outlined" sx={{ width: 275, height: cardHeight }}>
             <CardActionArea
                 target="_blank"
                 href={props.item.url}
