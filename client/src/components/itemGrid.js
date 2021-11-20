@@ -10,10 +10,6 @@ import itemSvc from '../services/item';
 export default class ItemGrid extends Component {
     constructor(props) {
         super(props);
-        this.deleteItem = this.deleteItem.bind(this);
-        this.editItem = this.editItem.bind(this);
-        this.closeEdit = this.closeEdit.bind(this);
-        this.closeLogin = this.closeLogin.bind(this);
         this.state = { 
             items: [],
             editItem: {},
@@ -32,7 +28,7 @@ export default class ItemGrid extends Component {
             })
     }
 
-    deleteItem(id) {
+    deleteItem = (id) => {
         adminSvc.deleteItem(id)
             .then((response) => {
                 console.log(response.data);
@@ -42,12 +38,12 @@ export default class ItemGrid extends Component {
             });
     }
 
-    editItem(item) {
+    editItem = (item) => {
         this.setState({ editItem: item });
         this.setState({ editIsOpen: true });
     }
 
-    closeEdit() {
+    closeEdit = () => {
         this.setState({ editItem: {} });
         this.setState({ editIsOpen: false });
     }
@@ -56,15 +52,14 @@ export default class ItemGrid extends Component {
         this.setState({ loginIsOpen: false });
     }
 
-    itemList() {
+    itemList = () => {
         return this.state.items.map((currentItem) => {
             return (
-                <Grid item xs>
+                <Grid item xs key={currentItem._id}>
                     <ItemCard
                         item={currentItem}
                         editClick={(x) => this.editItem(x) }
                         deleteClick={(x) => this.deleteItem(x)}
-                        key={currentItem._id}
                     />
                 </Grid>
             );
