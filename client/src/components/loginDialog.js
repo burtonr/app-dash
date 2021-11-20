@@ -13,7 +13,7 @@ import auth from "../services/auth";
 export default function LoginDialog({ isOpen, handleCloseDialog, handleSuccess }) {
     const [password, setpassword] = useState();
     const [message, setMessage] = useState();
-    
+
     const onChangePassword = (e) => {
         setpassword(e.target.value);
     }
@@ -26,7 +26,7 @@ export default function LoginDialog({ isOpen, handleCloseDialog, handleSuccess }
                 handleSuccess();
                 handleClose();
             }, (err) => {
-                if(err.response.data) {
+                if (err.response.data) {
                     setMessage(err.response.data.message);
                 } else {
                     setMessage(err.response.statusText);
@@ -41,21 +41,24 @@ export default function LoginDialog({ isOpen, handleCloseDialog, handleSuccess }
     return (
         <Dialog open={isOpen} onClose={handleClose} sx={{ minWidth: 150 }}>
             <DialogTitle>Enter Admin Password</DialogTitle>
-            <DialogContent>
-                <TextField
-                    required
-                    fullWidth
-                    id="admin-password"
-                    label="Password"
-                    type="password"
-                    onChange={onChangePassword}
-                />
-            </DialogContent>
-            <DialogContentText>{message}</DialogContentText>
-            <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={onSubmit}>Login</Button>
-            </DialogActions>
+            <form id="login-form" onSubmit={onSubmit}>
+                <DialogContent>
+                    <TextField
+                        required
+                        fullWidth
+                        autoFocus
+                        id="admin-password"
+                        label="Password"
+                        type="password"
+                        onChange={onChangePassword}
+                    />
+                </DialogContent>
+                <DialogContentText>{message}</DialogContentText>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button type="submit" form="login-form">Login</Button>
+                </DialogActions>
+            </form>
         </Dialog>
     );
 }
