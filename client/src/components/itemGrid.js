@@ -59,12 +59,11 @@ export default class ItemGrid extends Component {
     itemList() {
         return this.state.items.map((currentItem) => {
             return (
-                <Grid item xs>
+                <Grid item xs key={currentItem._id}>
                     <ItemCard
                         item={currentItem}
                         editClick={(x) => this.editItem(x) }
                         deleteClick={(x) => this.deleteItem(x)}
-                        key={currentItem._id}
                     />
                 </Grid>
             );
