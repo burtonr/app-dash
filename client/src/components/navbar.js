@@ -22,7 +22,7 @@ import LoginDialog from './loginDialog';
 const Navbar = () => {
     const [loginOpen, setLoginOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(auth.isLoggedIn());
     const manageMode = useLocation().search === '?manage';
 
     const openEdit = () => {
