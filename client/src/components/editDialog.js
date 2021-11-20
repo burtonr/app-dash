@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Button,
     Dialog,
@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import admin from '../services/admin';
 
-export default function Edit({ isOpen, handleCloseDialog, item }) {
+export default function Edit ({ isOpen, handleCloseDialog, item }) {
     let isNew = false;
     if(!item) {
         isNew = true;
@@ -20,13 +20,20 @@ export default function Edit({ isOpen, handleCloseDialog, item }) {
         }
     }
 
-    const [itemTitle, setitemTitle] = useState();
-    const [itemDescription, setItemDescription] = React.useState(item.description);
-    const [itemUrl, setItemUrl] = React.useState(item.url);
-    const [itemImageUrl, setItemImageUrl] = React.useState(item.imageUrl);
+    const [itemTitle, setItemTitle] = useState();
+    const [itemDescription, setItemDescription] = useState();
+    const [itemUrl, setItemUrl] = useState();
+    const [itemImageUrl, setItemImageUrl] = useState();
+
+    useEffect(() => {
+        setItemTitle(item.title);
+        setItemDescription(item.description);
+        setItemUrl(item.url);
+        setItemImageUrl(item.imageUrl);
+    }, [item.title, item.description, item.url, item.imageUrl])
 
     const onChangeItemTitle = (e) => {
-        setitemTitle(e.target.value);
+        setItemTitle(e.target.value);
     }
 
     const onChangeItemUrl = (e) => {
@@ -81,45 +88,55 @@ export default function Edit({ isOpen, handleCloseDialog, item }) {
         handleCloseDialog(true);
     };
 
+    const spacedInput = {
+        padding: '10px'
+    };
+
     return (
         <Dialog open={isOpen} onClose={handleClose}>
             {isNew ? <DialogTitle>Add Item</DialogTitle> : <DialogTitle>Edit Item</DialogTitle>}
-            <DialogContent>
-                <TextField
-                    required
-                    fullWidth
-                    id="item-title"
-                    label="Title"
-                    defaultValue={item.title}
-                    onChange={onChangeItemTitle}
-                />
-                <TextField
-                    fullWidth
-                    id="item-description"
-                    label="Description"
-                    defaultValue={item.description}
-                    onChange={onChangeItemDescription}
-                />
-                <TextField
-                    required
-                    fullWidth
-                    id="item-url"
-                    label="URL"
-                    defaultValue={item.url}
-                    onChange={onChangeItemUrl}
-                />
-                <TextField
-                    fullWidth
-                    id="item-imageurl"
-                    label="Image URL"
-                    defaultValue={item.imageUrl}
-                    onChange={onChangeItemImageUrl}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={onSubmit}>Submit</Button>
-            </DialogActions>
+            <form id="edit-form" onSubmit={onSubmit}>
+                <DialogContent>
+                    <TextField
+                        required
+                        fullWidth
+                        id="item-title"
+                        label="Title"
+                        style={spacedInput}
+                        defaultValue={item.title}
+                        onChange={onChangeItemTitle}
+                    />
+                    <TextField
+                        fullWidth
+                        id="item-description"
+                        label="Description"
+                        style={spacedInput}
+                        defaultValue={item.description}
+                        onChange={onChangeItemDescription}
+                    />
+                    <TextField
+                        required
+                        fullWidth
+                        id="item-url"
+                        label="URL"
+                        style={spacedInput}
+                        defaultValue={item.url}
+                        onChange={onChangeItemUrl}
+                    />
+                    <TextField
+                        fullWidth
+                        id="item-imageurl"
+                        label="Image URL"
+                        style={spacedInput}
+                        defaultValue={item.imageUrl}
+                        onChange={onChangeItemImageUrl}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button type="submit" form="edit-form">Submit</Button>
+                </DialogActions>
+            </form>
         </Dialog>
     );
 }
