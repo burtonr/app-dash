@@ -41,12 +41,14 @@ module.exports = function(authHandler) {
             imageUrl: req.body.imageUrl,
             image: smImg,
         };
-        db_connect
-            .collection('apps')
-            .insertOne(newItem, (err, cmdRes) => {
-                if (err) throw err;
-                res.json(cmdRes);
-            });
+        let insertResponse = await db_connect.collection('apps').insertOne(newItem); 
+        let dbItem = await db_connect.collection('apps').findOne({ _id: ObjectId(insertResponse.insertedId) })
+
+        let result = {
+            dbResponse: insertResponse,
+            newItem: dbItem
+        }
+        res.json(result);
     });
     router.put('/:itemId', async (req, res) => {
         let db_connect = dbo.getDataStore();
@@ -57,7 +59,7 @@ module.exports = function(authHandler) {
             smImg = await img.downloadAndResize(req.body.imageUrl);
         }
 
-        let newvalues = {
+        let newValues = {
             $set: {
                 title: req.body.title,
                 description: req.body.description,
@@ -66,13 +68,14 @@ module.exports = function(authHandler) {
                 image: smImg,
             },
         };
-        db_connect
-            .collection('apps')
-            .updateOne({ _id: ObjectId(req.params.itemId) }, newvalues, (err, cmdRes) => {
-                if (err) throw err;
-                console.log(`Item ${req.params.itemId} updated`);
-                res.json(cmdRes);
-            });
+        let updateResponse = await db_connect.collection('apps').updateOne({ _id: ObjectId(req.params.itemId) }, newValues);
+        let dbItem = await db_connect.collection('apps').findOne({ _id: ObjectId(req.params.itemId) })
+
+        let result = {
+            dbResponse: updateResponse,
+            updatedItem: dbItem
+        }
+        res.json(result);
     });
     router.delete('/:itemId', (req, res) => {
         let db_connect = dbo.getDataStore();
