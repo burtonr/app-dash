@@ -89,7 +89,8 @@ const Navbar = () => {
                     }
                 </Toolbar>
             </AppBar>
-            <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} />
+            {/* TODO: Update the item list when a new item is added */}
+            <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={() => null } />
             <LoginDialog isOpen={loginOpen} handleCloseDialog={closeLogin} handleSuccess={setAdmin} />
         </Box>
     );

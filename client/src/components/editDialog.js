@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import admin from '../services/admin';
 
-export default function Edit ({ isOpen, handleCloseDialog, item }) {
+export default function Edit ({ isOpen, handleCloseDialog, item, setUpdatedItem }) {
     let isNew = false;
     if(!item) {
         isNew = true;
@@ -48,6 +48,10 @@ export default function Edit ({ isOpen, handleCloseDialog, item }) {
         setItemImageUrl(e.target.value);
     }
 
+    const setUpdated = (newItem) => {
+        setUpdatedItem(newItem)
+    }
+
     const onSubmit = (e) => {
         e.preventDefault();
         const editedItem = {
@@ -57,24 +61,18 @@ export default function Edit ({ isOpen, handleCloseDialog, item }) {
             imageUrl: itemImageUrl,
         };
 
-        console.log('Edited item:');
-        console.log(editedItem.title);
-        console.log(editedItem.url);
-        console.log(editedItem.description);
-        console.log(editedItem.imageUrl);
-
         if(isNew) {
             admin.addItem(editedItem)
-                .then(() => {
-
+                .then((res) => {
+                    setUpdated(res.data.updatedItem);
                 }, (err) => {
-
+                    console.error('Error saving new item');
+                    console.error(err);
                 })
         } else {
             admin.updateItem(item._id, editedItem)  
                 .then((res) => {
-                    console.log('Success');
-                    console.log(res);
+                    setUpdated(res.data.updatedItem);
                 }, (err) => {
                     console.log('Error');
                     console.log(err);
