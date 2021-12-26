@@ -31,7 +31,6 @@ export default class ItemGrid extends Component {
     deleteItem = (id) => {
         adminSvc.deleteItem(id)
             .then((response) => {
-                console.log(response.data);
                 this.setState({
                     items: this.state.items.filter((el) => el._id !== id),
                 });
@@ -41,6 +40,13 @@ export default class ItemGrid extends Component {
     editItem = (item) => {
         this.setState({ editItem: item });
         this.setState({ editIsOpen: true });
+    }
+
+    updateItem = (item) => {
+        let updatedItems = this.state.items;
+        let idx = updatedItems.findIndex(x => x._id === item._id)
+        updatedItems[idx] = item;
+        this.setState({ items: updatedItems})
     }
 
     closeEdit = () => {
@@ -86,6 +92,7 @@ export default class ItemGrid extends Component {
                     isOpen={this.state.editIsOpen}
                     handleCloseDialog={() => this.closeEdit(true)}
                     item={this.state.editItem}
+                    setUpdatedItem={(i) => this.updateItem(i)}
                 />
                 <LoginDialog
                     isOpen={this.state.loginIsOpen}
