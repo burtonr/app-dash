@@ -33,6 +33,11 @@ const Navbar = () => {
         setEditOpen(false);
     }
 
+    // Note: Reload the page on item added. Probably a better way, but don't want to introduce additional dependencies
+    const reloadPage = () => {
+        window.location.reload();
+    }
+
     const openLogin = () => {
         setLoginOpen(true);
     }
@@ -89,8 +94,7 @@ const Navbar = () => {
                     }
                 </Toolbar>
             </AppBar>
-            {/* TODO: Update the item list when a new item is added */}
-            <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={() => null } />
+            <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} />
             <LoginDialog isOpen={loginOpen} handleCloseDialog={closeLogin} handleSuccess={setAdmin} />
         </Box>
     );
