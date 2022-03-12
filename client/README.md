@@ -4,29 +4,41 @@ This is the main UI for the "App-Dash" project.
 It's built with [React](https://reactjs.org/) and [MaterialUI](https://mui.com/)
 
 ## Run
-The client can be run as a Docker container, or locally for development
+The client can be run as a Docker container, or locally for development.
 
-- Docker container
-    - First, build the image
-```bash
+### Docker container
+The container uses an entrypoint script that will read the environment variables that start with `APP_DASH_` and add them to the `window.ENV` object.
+
+This is how the api url is accessed at runtime allowing you to deploy this client code using different backends as desired.
+
+- First, build the image
+    
+```shell
 docker build -t app-dash-client .
 ```
-    - Then, run the container and map the port
-```bash
-docker run -p 3001:80 app-dash-client
-```
-    - Access the site at [http://localhost:3001](http://localhost:3001)
 
-- Locally
-    - First, be sure the node_modules are installed
-```bash
+- Then, run the container and map the port
+    - Be sure to set the environment variable for the `APP_DASH_API_URL`
+
+```shell
+docker run -p 3001:80 -e APP_DASH_API_URL='http://localhost:8080' app-dash-client
+```
+    
+- Access the site at [http://localhost:3001](http://localhost:3001)
+
+### Locally
+- First, be sure the node_modules are installed
+```shell
 npm i --silent
 ```
-    - Invoke the `start` command from `react-scripts`
-```bash
+    
+- Invoke the `start` command from `react-scripts`
+
+```shell
 npm start
 ```
-    - Access the site at [http://localhost:3000](http://localhost:3000)
+
+- Access the site at [http://localhost:3000](http://localhost:3000)
 
 
 ## Create React App (Generated)

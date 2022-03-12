@@ -1,7 +1,6 @@
 import axios from 'axios';
-import config from '../config/default.json';
 
-const API_URL = `${config.server.URI}`
+const API_URL = window.ENV.APP_DASH_API_URL;
 
 const getAllItems = () => {
     return axios.get(API_URL);
