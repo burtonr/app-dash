@@ -7,7 +7,9 @@ It's built with [React](https://reactjs.org/) and [MaterialUI](https://mui.com/)
 The client can be run as a Docker container, or locally for development.
 
 ### Docker container
-The container uses an entrypoint script that will read the environment variables that start with `APP_DASH_` and add them to the `window.ENV` object.
+The container uses an entrypoint script that will read the environment variables that start with `REACT_APP_` and add them to the `window.ENV` object.
+
+> Thanks to [axelhzf](https://github.com/axelhzf)'s repo: [create-react-app-docker-environment-variables](https://github.com/axelhzf/create-react-app-docker-environment-variables)
 
 This is how the api url is accessed at runtime allowing you to deploy this client code using different backends as desired.
 
