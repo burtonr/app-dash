@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './authHeader';
 
-const API_URL = `${window.ENV.APP_DASH_API_URL}/admin`;
+const API_URL = `${window.ENV ? window.ENV.REACT_APP_DASH_API_URL : process.env.REACT_APP_DASH_API_URL}/admin`;
 // axios.create({baseUrl: API_URL}) wasn't working as expected
 const authConfig = {
     headers: authHeader()

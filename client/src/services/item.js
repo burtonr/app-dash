@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = window.ENV.APP_DASH_API_URL;
+const API_URL = window.ENV ? window.ENV.REACT_APP_DASH_API_URL : process.env.REACT_APP_DASH_API_URL;
 
 const getAllItems = () => {
     return axios.get(API_URL);

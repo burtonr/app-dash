@@ -18,10 +18,10 @@ docker build -t app-dash-client .
 ```
 
 - Then, run the container and map the port
-    - Be sure to set the environment variable for the `APP_DASH_API_URL`
+    - Be sure to set the environment variable for the `REACT_APP_DASH_API_URL`
 
 ```shell
-docker run -p 3001:80 -e APP_DASH_API_URL='http://localhost:8080' app-dash-client
+docker run -p 3001:80 -e REACT_APP_DASH_API_URL='http://localhost:9090' app-dash-client
 ```
     
 - Access the site at [http://localhost:3001](http://localhost:3001)
@@ -33,6 +33,8 @@ npm i --silent
 ```
     
 - Invoke the `start` command from `react-scripts`
+    - The URL for the server is set in the `.env` file as a default to the localhost server
+    - See the React docs [Adding Custom Environment Variables](https://create-react-app.dev/docs/adding-custom-environment-variables/) for ways to override this.
 
 ```shell
 npm start
