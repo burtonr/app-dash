@@ -1,7 +1,6 @@
 import axios from 'axios';
-import config from '../config/default.json';
 
-const API_URL = `${config.server.URI}`
+const API_URL = window.ENV ? window.ENV.REACT_APP_DASH_API_URL : process.env.REACT_APP_DASH_API_URL
 
 const login = (password) => {
     return axios
