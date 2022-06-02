@@ -51,7 +51,7 @@ The App-Dash and MongoDB configuration is set in the `server/src/config/default.
 ```
 
 ### Client Configuration
-> Work In Progress
+Built with [React](https://reactjs.org/) and [MaterialUI](https://mui.com/)
 
 Currently, the client configuration is hard-coded to read from `client/src/config/default.json`.
 

@@ -1,8 +1,8 @@
 {
     "appDash": {
-        "port": 8080,
+        "port": 9090,
         "authorize": false,
-        "adminPass": "",
+        "adminPass": "someSecret",
         "jwtSecret": "someSecret"
     },
     "mongo": {
