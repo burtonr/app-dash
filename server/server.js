@@ -4,15 +4,17 @@ const cors = require('cors')
 require('dotenv').config({ path: './local.env' })
 
 const dbo = require('./db/conn')
-const dashRoutes = require('./routes/dash')
+const routes = require('./routes')
+
 
 const port = process.env.PORT || 3000
 const app = express()
 app.use(cors());
-// app.use(express.json)
+app.use(express.json())
 
 app.use(express.static(path.join(__dirname, '..', 'public')))
-app.use('/api/dash', dashRoutes)
+app.use('/api/dash/auth', routes.authRoutes)
+app.use('/api/dash', routes.dashRoutes)
 
 app.listen(port, () => {
     dbo.connect(async function (err) {
