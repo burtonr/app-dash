@@ -16,10 +16,11 @@ router.post('/signin', async (req, res) => {
         let validPwd = bcryptjs.compareSync(req.body.password, foundUser.password)
         if (validPwd) {
             let token = jwt.sign({ id: foundUser._id }, apiKey, { expiresIn: 86400 })
+            let role = await db.collection('roles').findOne(foundUser.role)
             res.status(200).send({
                 _id: foundUser._id,
                 username: foundUser.username,
-                role: foundUser.role,
+                role: role.name,
                 accessToken: token
             })
             return
