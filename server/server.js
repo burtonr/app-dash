@@ -15,9 +15,10 @@ app.use(express.static(path.join(__dirname, '..', 'public')))
 app.use('/api/dash', dashRoutes)
 
 app.listen(port, () => {
-    dbo.connect(function (err) {
-        if (err) console.error(err)
-        dbo.initialize()
+    dbo.connect(async function (err) {
+        if (err)
+            console.error(err)
+        await dbo.initialize()
     })
     console.info(`Listening on port: ${port}`)
 })
