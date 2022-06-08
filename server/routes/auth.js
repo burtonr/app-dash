@@ -5,10 +5,6 @@ const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
 const apiKey = process.env.API_KEY
 
-router.post('/user', (req, res) => {
-
-})
-
 router.post('/signin', async (req, res) => {
     const db = dbo.getDb()
     let foundUser = await db.collection('users').findOne({ username: req.body.username })
