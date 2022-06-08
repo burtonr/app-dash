@@ -24,7 +24,8 @@ router.post('/signin', async (req, res) => {
     }
 
     res.status(401).send({ message: "Username or password is not valid" })
-
 })
+
+// TODO: Add password reset route
 
 module.exports = router

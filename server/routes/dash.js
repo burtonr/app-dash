@@ -41,4 +41,7 @@ router.post('/', [mw.verifyToken, mw.isEditor], async (req, res) => {
     res.json(result);
 })
 
+// TODO: Add delete route
+// TODO: Add update (patch/put) route
+
 module.exports = router
