@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
         });
 })
 
-router.post('/', [mw.verifyToken], async (req, res) => {
+router.post('/', [mw.verifyToken, mw.isEditor], async (req, res) => {
     let db = dbo.getDb();
 
     let smImg;
