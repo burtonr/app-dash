@@ -41,7 +41,43 @@ router.post('/', [mw.verifyToken, mw.isEditor], async (req, res) => {
     res.json(result);
 })
 
-// TODO: Add delete route
-// TODO: Add update (patch/put) route
+router.put('/:itemId', async (req, res) => {
+    let db_connect = dbo.getDataStore();
+
+    let smImg;
+
+    if (req.body.imageUrl) {
+        smImg = await img.downloadAndResize(req.body.imageUrl);
+    }
+
+    let newValues = {
+        $set: {
+            title: req.body.title,
+            description: req.body.description,
+            url: req.body.url,
+            imageUrl: req.body.imageUrl,
+            image: smImg,
+        },
+    };
+    let updateResponse = await db_connect.collection('apps').updateOne({ _id: ObjectId(req.params.itemId) }, newValues);
+    let dbItem = await db_connect.collection('apps').findOne({ _id: ObjectId(req.params.itemId) })
+
+    let result = {
+        dbResponse: updateResponse,
+        updatedItem: dbItem
+    }
+    res.json(result);
+});
+
+router.delete('/:itemId', [mw.verifyToken, mw.isEditor], (req, res) => {
+    let db_connect = dbo.getDataStore();
+    db_connect
+        .collection('apps')
+        .deleteOne({ _id: ObjectId(req.params.itemId) }, (err, obj) => {
+            if (err) throw err;
+            console.log(`Item ${req.params.itemId} was deleted`);
+            res.status(obj.deletedCount !== 0 ? 200 : 304).end();
+        });
+});
 
 module.exports = router

@@ -20,6 +20,7 @@ module.exports = {
         })
     },
     initialize: async function () {
+        // TODO: Add env var for "open access" OR admin only
         let addedRoles = await checkAndAddRoles()
         let addedAdmin = await checkAndAddAdmin()
 
