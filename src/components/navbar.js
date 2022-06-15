@@ -15,61 +15,61 @@ import {
     Menu,
     PlaylistAdd
 } from '@mui/icons-material'
-import auth from '../services/auth';
-import EditDialog from './editDialog';
-import LoginDialog from './loginDialog';
+// import auth from '../services/auth';
+// import EditDialog from './editDialog';
+// import LoginDialog from './loginDialog';
 
 const Navbar = () => {
-    const [loginOpen, setLoginOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(auth.isLoggedIn());
-    const manageMode = useLocation().search === '?manage';
+    // const [loginOpen, setLoginOpen] = useState(false);
+    // const [editOpen, setEditOpen] = useState(false);
+    // const [isAdmin, setIsAdmin] = useState(auth.isLoggedIn());
+    // const manageMode = useLocation().search === '?manage';
 
-    const openEdit = () => {
-        setEditOpen(true);
-    }
+    // const openEdit = () => {
+    //     setEditOpen(true);
+    // }
 
-    const closeEdit = () => {
-        setEditOpen(false);
-    }
+    // const closeEdit = () => {
+    //     setEditOpen(false);
+    // }
 
-    // Note: Reload the page on item added. Probably a better way, but don't want to introduce additional dependencies
-    const reloadPage = () => {
-        window.location.reload();
-    }
+    // // Note: Reload the page on item added. Probably a better way, but don't want to introduce additional dependencies
+    // const reloadPage = () => {
+    //     window.location.reload();
+    // }
 
-    const openLogin = () => {
-        setLoginOpen(true);
-    }
+    // const openLogin = () => {
+    //     setLoginOpen(true);
+    // }
 
-    const closeLogin = () => {
-        setLoginOpen(false);
-    }
+    // const closeLogin = () => {
+    //     setLoginOpen(false);
+    // }
 
-    const setAdmin = () => {
-        setIsAdmin(true);
-    }
+    // const setAdmin = () => {
+    //     setIsAdmin(true);
+    // }
 
-    const removeAdmin = () => {
-        auth.logout();
-        setIsAdmin(false);
-    }
+    // const removeAdmin = () => {
+    //     auth.logout();
+    //     setIsAdmin(false);
+    // }
 
-    const modeButton = () => {
-        if (isAdmin) {
-            if (manageMode) {
-                return <Tooltip title="View">
-                    <Button color="inherit" component={NavLink} to="/"><Menu /></Button>
-                </Tooltip>
-            } else {
-                return <Tooltip title="Manage">
-                    <Button color="inherit" component={NavLink} to="?manage"><MenuOpen /></Button>
-                </Tooltip>
-            }
-        } else {
-            return null;
-        }
-    }
+    // const modeButton = () => {
+    //     if (isAdmin) {
+    //         if (manageMode) {
+    //             return <Tooltip title="View">
+    //                 <Button color="inherit" component={NavLink} to="/"><Menu /></Button>
+    //             </Tooltip>
+    //         } else {
+    //             return <Tooltip title="Manage">
+    //                 <Button color="inherit" component={NavLink} to="?manage"><MenuOpen /></Button>
+    //             </Tooltip>
+    //         }
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -78,8 +78,8 @@ const Navbar = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Button color="inherit" component={NavLink} to="/">App Dash</Button>
                     </Typography>
-                    { modeButton() }
-                    { isAdmin ? 
+                    {/* { modeButton() } */}
+                    {/* { isAdmin ? 
                         <Tooltip title="Add Item">
                             <Button color="inherit" onClick={() => openEdit()}><PlaylistAdd /></Button>
                         </Tooltip>
@@ -91,11 +91,11 @@ const Navbar = () => {
                         <Tooltip title="Login">
                             <Button color="inherit" onClick={() => openLogin()}><Login /></Button>
                         </Tooltip>
-                    }
+                    } */}
                 </Toolbar>
             </AppBar>
-            <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} />
-            <LoginDialog isOpen={loginOpen} handleCloseDialog={closeLogin} handleSuccess={setAdmin} />
+            {/* <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} />
+            <LoginDialog isOpen={loginOpen} handleCloseDialog={closeLogin} handleSuccess={setAdmin} /> */}
         </Box>
     );
 };

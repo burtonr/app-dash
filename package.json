@@ -5,7 +5,9 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "build": "webpack",
+    "build": "webpack --mode=development",
+    "watch": "webpack --watch",
+    "serve": "webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Burton Rheutan",
