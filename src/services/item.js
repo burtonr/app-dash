@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-const API_URL = window.ENV ? window.ENV.REACT_APP_DASH_API_URL : process.env.REACT_APP_DASH_API_URL;
-
 const getAllItems = () => {
-    return axios.get(API_URL);
+    return axios.get('/api/dash/');
 }
 
 const logAccess = (logData) => {

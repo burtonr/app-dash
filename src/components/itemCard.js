@@ -10,12 +10,12 @@ import {
 } from "@mui/material";
 
 import { Delete, Edit, Label } from '@mui/icons-material';
-import auth from '../services/auth';
+// import auth from '../services/auth';
 
 const ItemCard = (props) => {
-    const isManaged = useLocation().search === '?manage';
-    const isAdmin = auth.isLoggedIn();
-    const cardHeight = isManaged ? 125 : 75;
+    // const isManaged = useLocation().search === '?manage';
+    // const isAdmin = auth.isLoggedIn();
+    const cardHeight = 75; // isManaged ? 125 : 75;
     let itemAvatar = (<Avatar><Label /></Avatar>)
 
     if (props.item.image || props.item.imageUrl) {
@@ -42,7 +42,7 @@ const ItemCard = (props) => {
                     avatar={itemAvatar}
                 />
             </CardActionArea>
-            {isAdmin && isManaged ? <CardActions disableSpacing >
+            {/* {isAdmin && isManaged ? <CardActions disableSpacing >
                 <IconButton aria-label="edit" onClick={() => props.editClick(props.item)}>
                     <Edit />
                 </IconButton>
@@ -50,7 +50,7 @@ const ItemCard = (props) => {
                     <Delete />
                 </IconButton>
             </CardActions>
-                : null}
+                : null} */}
         </Card>
     );
 };

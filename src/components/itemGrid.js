@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Box, Grid } from "@mui/material";
 
 import ItemCard from './itemCard';
-import EditDialog from './editDialog';
-import LoginDialog from './loginDialog';
-import adminSvc from '../services/admin';
+// import EditDialog from './editDialog';
+// import LoginDialog from './loginDialog';
+// import adminSvc from '../services/admin';
 import itemSvc from '../services/item';
 
 export default class ItemGrid extends Component {
@@ -29,34 +29,34 @@ export default class ItemGrid extends Component {
     }
 
     deleteItem = (id) => {
-        adminSvc.deleteItem(id)
-            .then((response) => {
-                this.setState({
-                    items: this.state.items.filter((el) => el._id !== id),
-                });
-            });
+    //     adminSvc.deleteItem(id)
+    //         .then((response) => {
+    //             this.setState({
+    //                 items: this.state.items.filter((el) => el._id !== id),
+    //             });
+    //         });
     }
 
     editItem = (item) => {
-        this.setState({ editItem: item });
-        this.setState({ editIsOpen: true });
+    //     this.setState({ editItem: item });
+    //     this.setState({ editIsOpen: true });
     }
 
-    updateItem = (item) => {
-        let updatedItems = this.state.items;
-        let idx = updatedItems.findIndex(x => x._id === item._id)
-        updatedItems[idx] = item;
-        this.setState({ items: updatedItems})
-    }
+    // updateItem = (item) => {
+    //     let updatedItems = this.state.items;
+    //     let idx = updatedItems.findIndex(x => x._id === item._id)
+    //     updatedItems[idx] = item;
+    //     this.setState({ items: updatedItems})
+    // }
 
-    closeEdit = () => {
-        this.setState({ editItem: {} });
-        this.setState({ editIsOpen: false });
-    }
+    // closeEdit = () => {
+    //     this.setState({ editItem: {} });
+    //     this.setState({ editIsOpen: false });
+    // }
 
-    closeLogin = () => {
-        this.setState({ loginIsOpen: false });
-    }
+    // closeLogin = () => {
+    //     this.setState({ loginIsOpen: false });
+    // }
 
     itemList = () => {
         return this.state.items.map((currentItem) => {
@@ -88,7 +88,7 @@ export default class ItemGrid extends Component {
                 >
                     {this.itemList()}
                 </Grid>
-                <EditDialog 
+                {/* <EditDialog 
                     isOpen={this.state.editIsOpen}
                     handleCloseDialog={() => this.closeEdit(true)}
                     item={this.state.editItem}
@@ -97,7 +97,7 @@ export default class ItemGrid extends Component {
                 <LoginDialog
                     isOpen={this.state.loginIsOpen}
                     handleCloseDialog={() => this.closeLogin(true)}
-                />
+                /> */}
             </Box>
         );
     }
