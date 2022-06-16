@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
     AppBar,
@@ -15,11 +15,25 @@ import {
     Menu,
     PlaylistAdd
 } from '@mui/icons-material'
-// import auth from '../services/auth';
+import authService from "../services/auth.service";
 // import EditDialog from './editDialog';
 // import LoginDialog from './loginDialog';
 
-const Navbar = () => {
+export default class Navbar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentUser: undefined
+        };
+    }
+
+    componentDidMount() {
+        const user = authService.getCurrentUser();
+        if (user) {
+            this.setState({ currentUser: user })
+        }
+    }
+
     // const [loginOpen, setLoginOpen] = useState(false);
     // const [editOpen, setEditOpen] = useState(false);
     // const [isAdmin, setIsAdmin] = useState(auth.isLoggedIn());
@@ -70,34 +84,45 @@ const Navbar = () => {
     //         return null;
     //     }
     // }
+    login() {
+        console.log('Click the login button');
+    }
 
-    return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Button color="inherit" component={NavLink} to="/">App Dash</Button>
-                    </Typography>
-                    {/* { modeButton() } */}
-                    {/* { isAdmin ? 
+    logout = () => {
+        console.log('Logging out...');
+        authService.logout();
+        // TODO: Route to public only page
+        this.setState({ currentUser: undefined })
+    }
+
+    render() {
+        const { currentUser } = this.state;
+        return (
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <Button color="inherit" component={NavLink} to="/">App Dash</Button>
+                        </Typography>
+                        {/* { modeButton() } */}
+                        {/* { isAdmin ? 
                         <Tooltip title="Add Item">
                             <Button color="inherit" onClick={() => openEdit()}><PlaylistAdd /></Button>
                         </Tooltip>
-                    : null }
-                    {isAdmin ?
-                        <Tooltip title="Logout">
-                            <Button color="inherit" onClick={() => removeAdmin()}><Logout /></Button>
-                        </Tooltip> :
-                        <Tooltip title="Login">
-                            <Button color="inherit" onClick={() => openLogin()}><Login /></Button>
-                        </Tooltip>
-                    } */}
-                </Toolbar>
-            </AppBar>
-            {/* <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} />
-            <LoginDialog isOpen={loginOpen} handleCloseDialog={closeLogin} handleSuccess={setAdmin} /> */}
-        </Box>
-    );
-};
-
-export default Navbar;
+                    : null } */}
+                        {currentUser ?
+                            <Tooltip title="Logout">
+                                <Button color="inherit" onClick={this.logout}><Logout /></Button>
+                            </Tooltip> :
+                            <Tooltip title="Login">
+                                <Button color="inherit" onClick={this.login}><Login /></Button>
+                            </Tooltip>
+                        }
+                    </Toolbar>
+                </AppBar>
+                {/* <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} />
+                <LoginDialog isOpen={loginOpen} handleCloseDialog={closeLogin} handleSuccess={setAdmin} /> */}
+            </Box>
+        )
+    };
+}

@@ -5,7 +5,7 @@ import ItemCard from './itemCard';
 // import EditDialog from './editDialog';
 // import LoginDialog from './loginDialog';
 // import adminSvc from '../services/admin';
-import itemSvc from '../services/item';
+import itemSvc from '../services/item.service';
 
 export default class ItemGrid extends Component {
     constructor(props) {
