@@ -84,9 +84,6 @@ export default class Navbar extends Component {
     //         return null;
     //     }
     // }
-    login() {
-        console.log('Click the login button');
-    }
 
     logout = () => {
         console.log('Logging out...');
@@ -96,7 +93,8 @@ export default class Navbar extends Component {
     }
 
     render() {
-        const { currentUser } = this.state;
+        const { currentUser } = this.state
+        const { loginClicked } = this.props
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
@@ -115,7 +113,7 @@ export default class Navbar extends Component {
                                 <Button color="inherit" onClick={this.logout}><Logout /></Button>
                             </Tooltip> :
                             <Tooltip title="Login">
-                                <Button color="inherit" onClick={this.login}><Login /></Button>
+                                <Button color="inherit" onClick={loginClicked}><Login /></Button>
                             </Tooltip>
                         }
                     </Toolbar>
