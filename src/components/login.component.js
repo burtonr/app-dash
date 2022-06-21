@@ -1,4 +1,4 @@
-import React,  { Component } from "react"
+import React, { Component } from "react"
 import {
     Button,
     Dialog,
@@ -10,10 +10,22 @@ import {
 } from '@mui/material'
 import authService from "../services/auth.service"
 
+const styles = {
+    inputField: {
+        margin: 10
+    },
+    errorMessage: {
+        width: 270,
+        margin: '0 auto',
+        color: 'red',
+    }
+}
+
 export default class LoginDialog extends Component {
     constructor(props) {
         super(props)
         this.onSubmit = this.onSubmit.bind(this)
+        this.handleClose = this.handleClose.bind(this)
         this.onUsernameChange = this.onUsernameChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
         this.state = {
@@ -39,7 +51,6 @@ export default class LoginDialog extends Component {
 
         authService.login(username, password)
             .then(() => {
-                this.props.history.push('/')
                 window.location.reload()
             }, (err) => {
                 if (err.response.data) {
@@ -50,36 +61,42 @@ export default class LoginDialog extends Component {
             });
     }
 
-    handleClose()  {
-        console.log('closed  dialog')
+    handleClose() {
+        this.setState({
+            username: '',
+            password: '',
+            loading: false,
+            message: ''
+        })
+        window.location.reload()
     }
 
     render() {
         const { username, password, message } = this.state
         return (
             <Dialog open={this.props.isOpen} onClose={this.handleClose} sx={{ minWidth: 150 }}>
-                <DialogTitle>Enter Admin Password</DialogTitle>
+                <DialogTitle>Login to App-Dash</DialogTitle>
                 <form id="login-form" onSubmit={this.onSubmit}>
                     <DialogContent>
-                    <TextField
-                            required
+                        <TextField
                             fullWidth
                             autoFocus
                             label="Username"
                             type="test"
                             value={username}
                             onChange={this.onUsernameChange}
+                            style={styles.inputField}
                         />
                         <TextField
-                            required
                             fullWidth
                             label="Password"
                             type="password"
                             value={password}
                             onChange={this.onPasswordChange}
+                            style={styles.inputField}
                         />
                     </DialogContent>
-                    <DialogContentText>{message}</DialogContentText>
+                    <DialogContentText style={styles.errorMessage}>{message}</DialogContentText>
                     <DialogActions>
                         <Button type="submit" form="login-form">Login</Button>
                     </DialogActions>
