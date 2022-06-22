@@ -7,8 +7,6 @@ import LoginDialog from "./components/login.component";
 class App extends Component {
     constructor(props) {
         super(props)
-        this.logOut = this.logOut.bind(this)
-        this.handleLoginClicked = this.handleLoginClicked.bind(this)
 
         this.state = {
             openLogin: false,
@@ -24,11 +22,11 @@ class App extends Component {
         }
     }
 
-    logOut() {
+    logOut = () => {
         authService.logout()
     }
 
-    handleLoginClicked() {
+    handleLoginClicked = () => {
         this.setState({ openLogin: true })
     }
 

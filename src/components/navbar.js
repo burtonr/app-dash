@@ -17,7 +17,6 @@ import {
 } from '@mui/icons-material'
 import authService from "../services/auth.service";
 // import EditDialog from './editDialog';
-// import LoginDialog from './loginDialog';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -34,7 +33,6 @@ export default class Navbar extends Component {
         }
     }
 
-    // const [loginOpen, setLoginOpen] = useState(false);
     // const [editOpen, setEditOpen] = useState(false);
     // const [isAdmin, setIsAdmin] = useState(auth.isLoggedIn());
     // const manageMode = useLocation().search === '?manage';
@@ -50,23 +48,6 @@ export default class Navbar extends Component {
     // // Note: Reload the page on item added. Probably a better way, but don't want to introduce additional dependencies
     // const reloadPage = () => {
     //     window.location.reload();
-    // }
-
-    // const openLogin = () => {
-    //     setLoginOpen(true);
-    // }
-
-    // const closeLogin = () => {
-    //     setLoginOpen(false);
-    // }
-
-    // const setAdmin = () => {
-    //     setIsAdmin(true);
-    // }
-
-    // const removeAdmin = () => {
-    //     auth.logout();
-    //     setIsAdmin(false);
     // }
 
     // const modeButton = () => {
@@ -118,8 +99,7 @@ export default class Navbar extends Component {
                         }
                     </Toolbar>
                 </AppBar>
-                {/* <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} />
-                <LoginDialog isOpen={loginOpen} handleCloseDialog={closeLogin} handleSuccess={setAdmin} /> */}
+                {/* <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} /> */}
             </Box>
         )
     };

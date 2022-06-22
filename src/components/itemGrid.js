@@ -3,7 +3,6 @@ import { Box, Grid } from "@mui/material";
 
 import ItemCard from './itemCard';
 // import EditDialog from './editDialog';
-// import LoginDialog from './loginDialog';
 // import adminSvc from '../services/admin';
 import itemSvc from '../services/item.service';
 
@@ -54,10 +53,6 @@ export default class ItemGrid extends Component {
     //     this.setState({ editIsOpen: false });
     // }
 
-    // closeLogin = () => {
-    //     this.setState({ loginIsOpen: false });
-    // }
-
     itemList = () => {
         return this.state.items.map((currentItem) => {
             return (
@@ -93,10 +88,6 @@ export default class ItemGrid extends Component {
                     handleCloseDialog={() => this.closeEdit(true)}
                     item={this.state.editItem}
                     setUpdatedItem={(i) => this.updateItem(i)}
-                />
-                <LoginDialog
-                    isOpen={this.state.loginIsOpen}
-                    handleCloseDialog={() => this.closeLogin(true)}
                 /> */}
             </Box>
         );

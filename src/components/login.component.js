@@ -24,10 +24,6 @@ const styles = {
 export default class LoginDialog extends Component {
     constructor(props) {
         super(props)
-        this.onSubmit = this.onSubmit.bind(this)
-        this.handleClose = this.handleClose.bind(this)
-        this.onUsernameChange = this.onUsernameChange.bind(this)
-        this.onPasswordChange = this.onPasswordChange.bind(this)
         this.state = {
             username: '',
             password: '',
@@ -36,15 +32,15 @@ export default class LoginDialog extends Component {
         }
     }
 
-    onUsernameChange(e) {
+    onUsernameChange = (e) => {
         this.setState({ username: e.target.value })
     }
 
-    onPasswordChange(e) {
+    onPasswordChange = (e) => {
         this.setState({ password: e.target.value })
     }
 
-    onSubmit(e) {
+    onSubmit = (e) => {
         const { username, password } = this.state
         e.preventDefault();
         this.setState({ message: '', loading: true })
@@ -61,7 +57,7 @@ export default class LoginDialog extends Component {
             });
     }
 
-    handleClose() {
+    handleClose = () => {
         this.setState({
             username: '',
             password: '',
