@@ -74,8 +74,10 @@ export default class Navbar extends Component {
     }
 
     render() {
+        // TODO: Use actual auth...
+        const isEditor = true;
         const { currentUser } = this.state
-        const { loginClicked } = this.props
+        const { loginClicked, editClicked } = this.props
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
@@ -84,11 +86,11 @@ export default class Navbar extends Component {
                             <Button color="inherit" component={NavLink} to="/">App Dash</Button>
                         </Typography>
                         {/* { modeButton() } */}
-                        {/* { isAdmin ? 
-                        <Tooltip title="Add Item">
-                            <Button color="inherit" onClick={() => openEdit()}><PlaylistAdd /></Button>
-                        </Tooltip>
-                    : null } */}
+                        {(currentUser && isEditor) &&
+                            <Tooltip title="Add Item">
+                                <Button color="inherit" onClick={editClicked}><PlaylistAdd /></Button>
+                            </Tooltip>
+                        }
                         {currentUser ?
                             <Tooltip title="Logout">
                                 <Button color="inherit" onClick={this.logout}><Logout /></Button>

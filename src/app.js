@@ -3,6 +3,7 @@ import Navbar from "./components/navbar";
 import ItemGrid from "./components/itemGrid";
 import authService from "./services/auth.service";
 import LoginDialog from "./components/login.component";
+import EditDialog from "./components/edit.component";
 
 class App extends Component {
     constructor(props) {
@@ -10,6 +11,7 @@ class App extends Component {
 
         this.state = {
             openLogin: false,
+            openEdit: false,
             currentUser: undefined
         }
     }
@@ -30,11 +32,22 @@ class App extends Component {
         this.setState({ openLogin: true })
     }
 
+    handleEditClicked = () => {
+        this.setState({ openEdit: true })
+    }
+
+    handleEditClosed = () => {
+        // TODO: reload items
+        console.log('Closed the edit dialog')
+        this.setState({ openEdit: false })
+    }
+
     render() {
         return (
             <div>
-                <Navbar loginClicked={this.handleLoginClicked} />
+                <Navbar loginClicked={this.handleLoginClicked} editClicked={this.handleEditClicked} />
                 <LoginDialog isOpen={this.state.openLogin} />
+                <EditDialog isOpen={this.state.openEdit} handleClose={this.handleEditClosed} />
                 <ItemGrid />
             </div>
         )
