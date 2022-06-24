@@ -1,92 +1,91 @@
 import React, { Component } from "react";
-// import { useEffect, useState } from "react";
 import {
     Button,
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
-    TextField
+    MenuItem,
+    TextField,
 } from '@mui/material';
 import itemSvc from '../services/item.service';
 
 const styles = {
+    dialog: {
+
+    },
     spacedInput: {
         padding: '10px'
+    },
+    selectInput: {
+        margin: 10,
+    }
+}
+
+const initialState = {
+    isNew: true,
+    item: {
+        title: '',
+        description: '',
+        url: '',
+        imageUrl: '',
+        group: '',
     }
 }
 
 export default class EditDialog extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            isNew: false,
-            item: {
-                title: '',
-                description: '',
-                url: '',
-                imageUrl: '',
-            }
-        }
+        this.state = initialState
     }
 
-    onChangeItemTitle = (e) => {
-        this.setState({ item: { title: e.target.value } });
-    }
-
-    onChangeItemUrl = (e) => {
-        this.setState({ item: { url: e.target.value } });
-    }
-
-    onChangeItemDescription = (e) => {
-        this.setState({ item: { description: e.target.value } });
-    }
-
-    onChangeItemImageUrl = (e) => {
-        this.setState({ item: { imageUrl: e.target.value } });
-    }
+    onChange = e => {
+        const { name, value } = e.target;
+        this.setState(prevState => ({ item: { ...prevState.item, [name]: value } }));
+      };
 
     onSubmit = (e) => {
         e.preventDefault();
-        console.log('Submit changes')
-        // const editedItem = {
-        //     title: itemTitle,
-        //     url: itemUrl,
-        //     description: itemDescription,
-        //     imageUrl: itemImageUrl,
-        // };
+        const { handleClose } = this.props
+        const { isNew, item: editedItem } = this.state
 
-        // if (isNew) {
-        //     itemSvc.addItem(editedItem)
-        //         .then((res) => {
-        //             setUpdated(res.data.updatedItem);
-        //         }, (err) => {
-        //             console.error('Error saving new item');
-        //             console.error(err);
-        //         })
-        // } else {
-        //     itemSvc.updateItem(item._id, editedItem)
-        //         .then((res) => {
-        //             setUpdated(res.data.updatedItem);
-        //         }, (err) => {
-        //             console.log('Error');
-        //             console.log(err);
-        //         })
-        // }
+        if (isNew) {
+            console.log(`Creating new item: ${JSON.stringify(editedItem)}`)
+            // itemSvc.addItem(editedItem)
+            //     .then((res) => {
+            //         setUpdated(res.data.updatedItem);
+            //     }, (err) => {
+            //         console.error('Error saving new item');
+            //         console.error(err);
+            //     })
+        } else {
+            console.log(`Editing existing item: ${JSON.stringify(editedItem)}`)
+            // itemSvc.updateItem(item._id, editedItem)
+            //     .then((res) => {
+            //         setUpdated(res.data.updatedItem);
+            //     }, (err) => {
+            //         console.log('Error');
+            //         console.log(err);
+            //     })
+        }
 
-    //     handleClose();
+        this.clearAndClose();
     }
 
-    // handleClose = () => {
-    //     handleCloseDialog(true);
-    // };
+    clearAndClose = () => {
+        const { handleClose } = this.props
+        this.setState({...initialState})
+        handleClose()
+    }
 
     render() {
-        const { isOpen, handleClose } = this.props
+        const { isOpen } = this.props
         const { isNew, item } = this.state
+        const titleText = isNew ? 'Add Item' : 'Edit Item'
+        const groups = ['', 'local', 'web', 'admin']
         return (
-            <Dialog open={isOpen} onClose={handleClose}>
-                {isNew ? <DialogTitle>Add Item</DialogTitle> : <DialogTitle>Edit Item</DialogTitle>}
+            <Dialog open={isOpen} onClose={this.clearAndClose} style={styles.dialog}>
+                <DialogTitle>{titleText}</DialogTitle>
                 <form id="edit-form" onSubmit={this.onSubmit}>
                     <DialogContent>
                         <TextField
@@ -94,68 +93,66 @@ export default class EditDialog extends Component {
                             fullWidth
                             id="item-title"
                             label="Title"
+                            name="title"
                             style={styles.spacedInput}
                             defaultValue={item.title}
-                            onChange={this.onChangeItemTitle}
+                            onChange={this.onChange}
                         />
                         <TextField
                             fullWidth
                             id="item-description"
                             label="Description"
+                            name="description"
                             style={styles.spacedInput}
                             defaultValue={item.description}
-                            onChange={this.onChangeItemDescription}
+                            onChange={this.onChange}
                         />
                         <TextField
                             required
                             fullWidth
                             id="item-url"
                             label="URL"
+                            name="url"
                             style={styles.spacedInput}
                             defaultValue={item.url}
-                            onChange={this.onChangeItemUrl}
+                            onChange={this.onChange}
                         />
                         <TextField
                             fullWidth
                             id="item-imageurl"
                             label="Image URL"
+                            name="imageUrl"
                             style={styles.spacedInput}
                             defaultValue={item.imageUrl}
-                            onChange={this.onChangeItemImageUrl}
+                            onChange={this.onChange}
                         />
+                        <TextField
+                            fullWidth
+                            select
+                            id="item-group-select"
+                            label="Group"
+                            name="group"
+                            style={styles.selectInput}
+                            defaultValue={item.group}
+                            value={item.group}
+                            onChange={this.onChange}
+                            >
+                            {groups.map((group) => (
+                                    <MenuItem
+                                        key={group}
+                                        value={group}
+                                    >
+                                    {group}
+                                    </MenuItem>
+                                ))}
+                        </TextField>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={this.clearAndClose}>Cancel</Button>
                         <Button type="submit" form="edit-form">Submit</Button>
                     </DialogActions>
-                </form>
+            </form>
             </Dialog>
         );
     }
 }
-
-// export default function Edit({ isOpen, handleCloseDialog, item, setUpdatedItem }) {
-//     let isNew = false;
-//     if (!item) {
-//         isNew = true;
-//         item = {
-//             title: '',
-//             description: '',
-//             imageUrl: ''
-//         }
-//     }
-
-//     useEffect(() => {
-//         setItemTitle(item.title);
-//         setItemDescription(item.description);
-//         setItemUrl(item.url);
-//         setItemImageUrl(item.imageUrl);
-//     }, [item.title, item.description, item.url, item.imageUrl])
-
-    
-//     const setUpdated = (newItem) => {
-//         setUpdatedItem(newItem)
-//     }
-
-    
-// }
