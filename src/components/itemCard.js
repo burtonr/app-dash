@@ -1,5 +1,4 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { Component } from "react";
 import {
     Avatar,
     Card,
@@ -10,49 +9,59 @@ import {
 } from "@mui/material";
 
 import { Delete, Edit, Label } from '@mui/icons-material';
-// import auth from '../services/auth';
 
-const ItemCard = (props) => {
-    // const isManaged = useLocation().search === '?manage';
-    // const isAdmin = auth.isLoggedIn();
-    const cardHeight = 75; // isManaged ? 125 : 75;
-    let itemAvatar = (<Avatar><Label /></Avatar>)
-
-    if (props.item.image || props.item.imageUrl) {
-        const avatarSrc = 
-            props.item.image ? 
-                `data:image/${props.item.image.info.format};base64,${props.item.image.data}` :
-                props.item.imageUrl
-        itemAvatar = (<Avatar
-            aria-label="icon"
-            src={avatarSrc}
-        />)
+export default class ItemCard extends Component {
+    constructor(props) {
+        super(props);
     }
 
-    return (
-        <Card variant="outlined" sx={{ width: 275, height: cardHeight }}>
-            <CardActionArea
-                target="_blank"
-                href={props.item.url}
-                rel="noreferrer noopener"
-            >
-                <CardHeader
-                    title={props.item.title}
-                    subheader={props.item.description}
-                    avatar={itemAvatar}
-                />
-            </CardActionArea>
-            {/* {isAdmin && isManaged ? <CardActions disableSpacing >
-                <IconButton aria-label="edit" onClick={() => props.editClick(props.item)}>
-                    <Edit />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={() => props.deleteClick(props.item._id)}>
-                    <Delete />
-                </IconButton>
-            </CardActions>
-                : null} */}
-        </Card>
-    );
-};
+    getCardHeight = () => {
+        const { isManaged } = this.props
+        return isManaged ? 125 : 75
+    }
 
-export default ItemCard;
+    setAvatar = () => {
+        const { item: { image, imageUrl } } = this.props
+        if (image || imageUrl) {
+            const avatarSrc =
+                image ?
+                    `data:image/${image.info.format};base64,${image.data}` :
+                    imageUrl
+            return (<Avatar
+                aria-label="icon"
+                src={avatarSrc}
+            />)
+        } else {
+            return (<Avatar><Label /></Avatar>)
+        }
+    }
+
+    render() {
+        const { item, isManaged, editClicked, deleteClicked } = this.props
+
+        return (
+            <Card variant="outlined" sx={{ width: 275, height: this.getCardHeight() }}>
+                <CardActionArea
+                    target="_blank"
+                    href={item.url}
+                    rel="noreferrer noopener"
+                >
+                    <CardHeader
+                        title={item.title}
+                        subheader={item.description}
+                        avatar={this.setAvatar()}
+                    />
+                </CardActionArea>
+                {isManaged ? <CardActions disableSpacing >
+                    <IconButton aria-label="edit" onClick={() => editClicked(item)}>
+                        <Edit />
+                    </IconButton>
+                    <IconButton aria-label="delete" onClick={() => deleteClicked(item._id)}>
+                        <Delete />
+                    </IconButton>
+                </CardActions>
+                    : null}
+            </Card>
+        )
+    }
+}

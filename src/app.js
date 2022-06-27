@@ -24,11 +24,11 @@ class App extends Component {
             this.setState(prevState => ({ ...prevState, currentUser: user }))
         }
     }
-    
+
     handleLoginClicked = () => {
         this.setState(prevState => ({ ...prevState, openLogin: true }))
     }
-    
+
     handleLogoutClicked = () => {
         authService.logout()
     }
@@ -48,10 +48,10 @@ class App extends Component {
     }
 
     render() {
-        const { openLogin, openEdit } = this.state
+        const { openLogin, openEdit, manageMode } = this.state
         return (
             <div>
-                <Navbar 
+                <Navbar
                     loginClicked={this.handleLoginClicked}
                     logoutClicked={this.handleLogoutClicked}
                     editClicked={this.handleEditClicked}
@@ -59,7 +59,7 @@ class App extends Component {
                 />
                 <LoginDialog isOpen={openLogin} />
                 <EditDialog isOpen={openEdit} handleClose={this.handleEditClosed} />
-                <ItemGrid />
+                <ItemGrid manageMode={manageMode} />
             </div>
         )
     }

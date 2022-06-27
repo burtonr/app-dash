@@ -20,7 +20,9 @@ export default class ItemGrid extends Component {
     componentDidMount() {
         itemSvc.getAllItems()
             .then((response) => {
-                this.setState({ items: response.data });
+                const data = response.data
+                // groups: [...new Set(data.map(x => x.group))]
+                this.setState({ items: data });
             })
             .catch(function (err) {
                 console.error(err);
@@ -28,6 +30,7 @@ export default class ItemGrid extends Component {
     }
 
     deleteItem = (id) => {
+        console.log(`Deleting: ${JSON.stringify(id)}`)
     //     adminSvc.deleteItem(id)
     //         .then((response) => {
     //             this.setState({
@@ -37,6 +40,7 @@ export default class ItemGrid extends Component {
     }
 
     editItem = (item) => {
+        console.log(`Editing: ${JSON.stringify(item)}`)
     //     this.setState({ editItem: item });
     //     this.setState({ editIsOpen: true });
     }
@@ -54,13 +58,16 @@ export default class ItemGrid extends Component {
     // }
 
     itemList = () => {
-        return this.state.items.map((currentItem) => {
+        const { items } = this.state
+        const { manageMode } = this.props
+        return items.map((currentItem) => {
             return (
                 <Grid item xs key={currentItem._id}>
                     <ItemCard
                         item={currentItem}
-                        editClick={(x) => this.editItem(x) }
-                        deleteClick={(x) => this.deleteItem(x)}
+                        isManaged={manageMode}
+                        editClicked={this.editItem }
+                        deleteClicked={this.deleteItem}
                     />
                 </Grid>
             );
