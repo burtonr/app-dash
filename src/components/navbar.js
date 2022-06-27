@@ -21,7 +21,8 @@ export default class Navbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentUser: undefined
+            currentUser: undefined,
+            manageMode: false
         };
     }
 
@@ -32,29 +33,22 @@ export default class Navbar extends Component {
         }
     }
 
-    // const [isAdmin, setIsAdmin] = useState(auth.isLoggedIn());
-    // const manageMode = useLocation().search === '?manage';
-
     // // Note: Reload the page on item added. Probably a better way, but don't want to introduce additional dependencies
     // const reloadPage = () => {
     //     window.location.reload();
     // }
 
-    // const modeButton = () => {
-    //     if (isAdmin) {
-    //         if (manageMode) {
-    //             return <Tooltip title="View">
-    //                 <Button color="inherit" component={NavLink} to="/"><Menu /></Button>
-    //             </Tooltip>
-    //         } else {
-    //             return <Tooltip title="Manage">
-    //                 <Button color="inherit" component={NavLink} to="?manage"><MenuOpen /></Button>
-    //             </Tooltip>
-    //         }
-    //     } else {
-    //         return null;
-    //     }
-    // }
+    isEditor = () => {
+        const { currentUser } = this.state
+        return currentUser && (currentUser.role == 'admin' || currentUser.role == 'editor')
+    }
+
+    handleManageClick = () => {
+        const { manageClicked } = this.props
+
+        this.setState(prevState => ({ ...prevState, manageMode: !prevState.manageMode }))
+        manageClicked()
+    }
 
     logout = () => {
         console.log('Logging out...');
@@ -64,9 +58,7 @@ export default class Navbar extends Component {
     }
 
     render() {
-        // TODO: Use actual auth...
-        const isEditor = true;
-        const { currentUser } = this.state
+        const { currentUser, manageMode } = this.state
         const { loginClicked, editClicked } = this.props
         return (
             <Box sx={{ flexGrow: 1 }}>
@@ -75,8 +67,16 @@ export default class Navbar extends Component {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <Button color="inherit" component={NavLink} to="/">App Dash</Button>
                         </Typography>
-                        {/* { modeButton() } */}
-                        {(currentUser && isEditor) &&
+                        {this.isEditor() &&
+                            (manageMode ?
+                                <Tooltip title="View">
+                                    <Button color="inherit" onClick={this.handleManageClick}><Menu /></Button>
+                                </Tooltip> :
+                                <Tooltip title="Manage">
+                                    <Button color="inherit" onClick={this.handleManageClick}><MenuOpen /></Button>
+                                </Tooltip>)
+                        }
+                        {this.isEditor() &&
                             <Tooltip title="Add Item">
                                 <Button color="inherit" onClick={editClicked}><PlaylistAdd /></Button>
                             </Tooltip>

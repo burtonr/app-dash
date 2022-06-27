@@ -12,7 +12,8 @@ class App extends Component {
         this.state = {
             openLogin: false,
             openEdit: false,
-            currentUser: undefined
+            currentUser: undefined,
+            manageMode: false,
         }
     }
 
@@ -20,34 +21,44 @@ class App extends Component {
         const user = authService.getCurrentUser()
 
         if (user) {
-            this.setState({ currentUser: user })
+            this.setState(prevState => ({ ...prevState, currentUser: user }))
         }
     }
     
     handleLoginClicked = () => {
-        this.setState({ openLogin: true })
+        this.setState(prevState => ({ ...prevState, openLogin: true }))
     }
     
     handleLogoutClicked = () => {
         authService.logout()
     }
 
+    handleManageClicked = () => {
+        this.setState(prevState => ({ ...prevState, manageMode: !prevState.manageMode }))
+    }
+
     handleEditClicked = () => {
-        this.setState({ openEdit: true })
+        this.setState(prevState => ({ ...prevState, openEdit: true }))
     }
 
     handleEditClosed = () => {
         // TODO: reload items
         console.log('Closed the edit dialog')
-        this.setState({ openEdit: false })
+        this.setState(prevState => ({ ...prevState, openEdit: false }))
     }
 
     render() {
+        const { openLogin, openEdit } = this.state
         return (
             <div>
-                <Navbar loginClicked={this.handleLoginClicked} logoutClicked={this.handleLogoutClicked} editClicked={this.handleEditClicked} />
-                <LoginDialog isOpen={this.state.openLogin} />
-                <EditDialog isOpen={this.state.openEdit} handleClose={this.handleEditClosed} />
+                <Navbar 
+                    loginClicked={this.handleLoginClicked}
+                    logoutClicked={this.handleLogoutClicked}
+                    editClicked={this.handleEditClicked}
+                    manageClicked={this.handleManageClicked}
+                />
+                <LoginDialog isOpen={openLogin} />
+                <EditDialog isOpen={openEdit} handleClose={this.handleEditClosed} />
                 <ItemGrid />
             </div>
         )
