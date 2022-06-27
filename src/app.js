@@ -23,13 +23,13 @@ class App extends Component {
             this.setState({ currentUser: user })
         }
     }
-
-    logOut = () => {
-        authService.logout()
-    }
-
+    
     handleLoginClicked = () => {
         this.setState({ openLogin: true })
+    }
+    
+    handleLogoutClicked = () => {
+        authService.logout()
     }
 
     handleEditClicked = () => {
@@ -45,7 +45,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Navbar loginClicked={this.handleLoginClicked} editClicked={this.handleEditClicked} />
+                <Navbar loginClicked={this.handleLoginClicked} logoutClicked={this.handleLogoutClicked} editClicked={this.handleEditClicked} />
                 <LoginDialog isOpen={this.state.openLogin} />
                 <EditDialog isOpen={this.state.openEdit} handleClose={this.handleEditClosed} />
                 <ItemGrid />

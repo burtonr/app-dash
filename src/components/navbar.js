@@ -16,7 +16,6 @@ import {
     PlaylistAdd
 } from '@mui/icons-material'
 import authService from "../services/auth.service";
-// import EditDialog from './editDialog';
 
 export default class Navbar extends Component {
     constructor(props) {
@@ -33,17 +32,8 @@ export default class Navbar extends Component {
         }
     }
 
-    // const [editOpen, setEditOpen] = useState(false);
     // const [isAdmin, setIsAdmin] = useState(auth.isLoggedIn());
     // const manageMode = useLocation().search === '?manage';
-
-    // const openEdit = () => {
-    //     setEditOpen(true);
-    // }
-
-    // const closeEdit = () => {
-    //     setEditOpen(false);
-    // }
 
     // // Note: Reload the page on item added. Probably a better way, but don't want to introduce additional dependencies
     // const reloadPage = () => {
@@ -68,9 +58,9 @@ export default class Navbar extends Component {
 
     logout = () => {
         console.log('Logging out...');
-        authService.logout();
-        // TODO: Route to public only page
+        const { logoutClicked } = this.props
         this.setState({ currentUser: undefined })
+        logoutClicked()
     }
 
     render() {
@@ -101,7 +91,6 @@ export default class Navbar extends Component {
                         }
                     </Toolbar>
                 </AppBar>
-                {/* <EditDialog isOpen={editOpen} handleCloseDialog={closeEdit} setUpdatedItem={reloadPage} /> */}
             </Box>
         )
     };
