@@ -62,13 +62,13 @@ export default class AddDialog extends Component {
         //     })
 
         this.setState({ ...initialState })
-        handleClose()
+        handleClose(true)
     }
 
     onCancel = () => {
         const { handleClose } = this.props
         this.setState({ ...initialState })
-        handleClose()
+        handleClose(false)
     }
 
     render() {

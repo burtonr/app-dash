@@ -14,6 +14,7 @@ class App extends Component {
             openAdd: false,
             currentUser: undefined,
             manageMode: false,
+            itemAdded: 0,
         }
     }
 
@@ -41,13 +42,16 @@ class App extends Component {
         this.setState(prevState => ({ ...prevState, openAdd: true }))
     }
 
-    handleAddClosed = () => {
-        // TODO: reload items
-        this.setState(prevState => ({ ...prevState, openAdd: false }))
+    handleAddClosed = (shouldUpdate) => {
+        if (shouldUpdate) {
+            this.setState({ openAdd: false, itemAdded: this.state.itemAdded + 1 })
+        } else {
+            this.setState({ openAdd: false })
+        }
     }
 
     render() {
-        const { openLogin, openAdd, manageMode } = this.state
+        const { openLogin, openAdd, manageMode, itemAdded } = this.state
         return (
             <div>
                 <Navbar
@@ -58,7 +62,7 @@ class App extends Component {
                 />
                 <LoginDialog isOpen={openLogin} />
                 <AddDialog isOpen={openAdd} handleClose={this.handleAddClosed} />
-                <ItemGrid manageMode={manageMode} />
+                <ItemGrid manageMode={manageMode} itemAdded={itemAdded} />
             </div>
         )
     }

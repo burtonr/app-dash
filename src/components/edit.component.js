@@ -45,7 +45,7 @@ export default class EditDialog extends Component {
         const { item } = this.state
         const editedItem = { ...initItem, ...item}
 
-        console.log(`Editing existing item: ${JSON.stringify(editedItem)}`)
+        console.log(`Editing existing item: ${JSON.stringify(editedItem.title)}`)
         // itemSvc.updateItem(item._id, editedItem)
         //     .then((res) => {
         //         setUpdated(res.data.updatedItem);
@@ -54,7 +54,7 @@ export default class EditDialog extends Component {
         //         console.log(err);
         //     })
 
-        handleClose()
+        handleClose(true)
     }
 
     render() {
@@ -126,7 +126,7 @@ export default class EditDialog extends Component {
                         </TextField>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={() => handleClose(false)}>Cancel</Button>
                         <Button type="submit" form="edit-form">Submit</Button>
                     </DialogActions>
             </form>

@@ -16,15 +16,25 @@ export default class ItemGrid extends Component {
     }
 
     componentDidMount() {
+        this.getItems()
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (this.props.itemAdded != prevProps.itemAdded) {
+            this.getItems()
+        }
+    }
+    
+    getItems = () => {
         itemSvc.getAllItems()
-            .then((response) => {
-                const data = response.data
-                // groups: [...new Set(data.map(x => x.group))]
-                this.setState({ items: data });
-            })
-            .catch(function (err) {
-                console.error(err);
-            })
+        .then((response) => {
+            const data = response.data
+            // groups: [...new Set(data.map(x => x.group))]
+            this.setState({ items: data });
+        })
+        .catch(function (err) {
+            console.error(err);
+        })
     }
 
     deleteItem = (id) => {
@@ -39,12 +49,12 @@ export default class ItemGrid extends Component {
 
     editItem = (item) => {
         this.setState(prevState => ({ ...prevState, editIsOpen: true, editItem: item }));
-        // TODO: Update the item in the items array
     }
 
-    closeEdit = () => {
+    closeEdit = (shouldUpdate) => {
         this.setState(prevState => ({ ...prevState, editIsOpen: false, editItem: {} }));
-        // TODO: Update item list
+        if (shouldUpdate)
+            this.getItems()
     }
 
     itemList = () => {
