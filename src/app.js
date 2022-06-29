@@ -3,7 +3,7 @@ import Navbar from "./components/navbar";
 import ItemGrid from "./components/itemGrid";
 import authService from "./services/auth.service";
 import LoginDialog from "./components/login.component";
-import EditDialog from "./components/edit.component";
+import AddDialog from "./components/add.component";
 
 class App extends Component {
     constructor(props) {
@@ -11,7 +11,7 @@ class App extends Component {
 
         this.state = {
             openLogin: false,
-            openEdit: false,
+            openAdd: false,
             currentUser: undefined,
             manageMode: false,
         }
@@ -37,28 +37,27 @@ class App extends Component {
         this.setState(prevState => ({ ...prevState, manageMode: !prevState.manageMode }))
     }
 
-    handleEditClicked = () => {
-        this.setState(prevState => ({ ...prevState, openEdit: true }))
+    handleAddClicked = () => {
+        this.setState(prevState => ({ ...prevState, openAdd: true }))
     }
 
-    handleEditClosed = () => {
+    handleAddClosed = () => {
         // TODO: reload items
-        console.log('Closed the edit dialog')
-        this.setState(prevState => ({ ...prevState, openEdit: false }))
+        this.setState(prevState => ({ ...prevState, openAdd: false }))
     }
 
     render() {
-        const { openLogin, openEdit, manageMode } = this.state
+        const { openLogin, openAdd, manageMode } = this.state
         return (
             <div>
                 <Navbar
                     loginClicked={this.handleLoginClicked}
                     logoutClicked={this.handleLogoutClicked}
-                    editClicked={this.handleEditClicked}
+                    addClicked={this.handleAddClicked}
                     manageClicked={this.handleManageClicked}
                 />
                 <LoginDialog isOpen={openLogin} />
-                <EditDialog isOpen={openEdit} handleClose={this.handleEditClosed} />
+                <AddDialog isOpen={openAdd} handleClose={this.handleAddClosed} />
                 <ItemGrid manageMode={manageMode} />
             </div>
         )

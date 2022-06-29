@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Box, Grid } from "@mui/material";
 
 import ItemCard from './itemCard';
-// import EditDialog from './editDialog';
-// import adminSvc from '../services/admin';
+import EditDialog from './edit.component';
 import itemSvc from '../services/item.service';
 
 export default class ItemGrid extends Component {
@@ -13,7 +12,6 @@ export default class ItemGrid extends Component {
             items: [],
             editItem: {},
             editIsOpen: false,
-            loginIsOpen: false,
         };
     }
 
@@ -40,22 +38,14 @@ export default class ItemGrid extends Component {
     }
 
     editItem = (item) => {
-        console.log(`Editing: ${JSON.stringify(item)}`)
-    //     this.setState({ editItem: item });
-    //     this.setState({ editIsOpen: true });
+        this.setState(prevState => ({ ...prevState, editIsOpen: true, editItem: item }));
+        // TODO: Update the item in the items array
     }
 
-    // updateItem = (item) => {
-    //     let updatedItems = this.state.items;
-    //     let idx = updatedItems.findIndex(x => x._id === item._id)
-    //     updatedItems[idx] = item;
-    //     this.setState({ items: updatedItems})
-    // }
-
-    // closeEdit = () => {
-    //     this.setState({ editItem: {} });
-    //     this.setState({ editIsOpen: false });
-    // }
+    closeEdit = () => {
+        this.setState(prevState => ({ ...prevState, editIsOpen: false, editItem: {} }));
+        // TODO: Update item list
+    }
 
     itemList = () => {
         const { items } = this.state
@@ -75,6 +65,7 @@ export default class ItemGrid extends Component {
     }
 
     render() {
+        const { editIsOpen, editItem } = this.state
         return (
             <Box m="auto"
                 display="flex"
@@ -90,12 +81,11 @@ export default class ItemGrid extends Component {
                 >
                     {this.itemList()}
                 </Grid>
-                {/* <EditDialog 
-                    isOpen={this.state.editIsOpen}
-                    handleCloseDialog={() => this.closeEdit(true)}
-                    item={this.state.editItem}
-                    setUpdatedItem={(i) => this.updateItem(i)}
-                /> */}
+                <EditDialog 
+                    isOpen={editIsOpen}
+                    handleClose={this.closeEdit}
+                    item={editItem}
+                />
             </Box>
         );
     }

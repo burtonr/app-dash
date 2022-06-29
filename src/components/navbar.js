@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
     AppBar,
     Box,
@@ -33,11 +33,6 @@ export default class Navbar extends Component {
         }
     }
 
-    // // Note: Reload the page on item added. Probably a better way, but don't want to introduce additional dependencies
-    // const reloadPage = () => {
-    //     window.location.reload();
-    // }
-
     isEditor = () => {
         const { currentUser } = this.state
         return currentUser && (currentUser.role == 'admin' || currentUser.role == 'editor')
@@ -59,7 +54,7 @@ export default class Navbar extends Component {
 
     render() {
         const { currentUser, manageMode } = this.state
-        const { loginClicked, editClicked } = this.props
+        const { loginClicked, addClicked } = this.props
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
@@ -78,7 +73,7 @@ export default class Navbar extends Component {
                         }
                         {this.isEditor() &&
                             <Tooltip title="Add Item">
-                                <Button color="inherit" onClick={editClicked}><PlaylistAdd /></Button>
+                                <Button color="inherit" onClick={addClicked}><PlaylistAdd /></Button>
                             </Tooltip>
                         }
                         {currentUser ?

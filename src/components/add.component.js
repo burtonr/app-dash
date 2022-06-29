@@ -22,13 +22,20 @@ const styles = {
     }
 }
 
-export default class EditDialog extends Component {
+const initialState = {
+    item: {
+        title: '',
+        description: '',
+        url: '',
+        imageUrl: '',
+        group: '',
+    }
+}
+
+export default class AddDialog extends Component {
     constructor(props) {
         super(props)
-
-        this.state = {
-            item: this.props.item
-        }
+        this.state = initialState
     }
 
     // TODO: Get list of groups from API/DB
@@ -41,31 +48,36 @@ export default class EditDialog extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        const { handleClose, item: initItem } = this.props
-        const { item } = this.state
-        const editedItem = { ...initItem, ...item}
+        const { handleClose } = this.props
+        const { item: createdItem } = this.state
 
-        console.log(`Editing existing item: ${JSON.stringify(editedItem)}`)
-        // itemSvc.updateItem(item._id, editedItem)
+        
+        console.log(`Creating item: ${JSON.stringify(createdItem)}`)
+        // itemSvc.addItem(item._id, createdItem)
         //     .then((res) => {
-        //         setUpdated(res.data.updatedItem);
+        //         setUpdated(res.data.addedItem);
         //     }, (err) => {
         //         console.log('Error');
         //         console.log(err);
         //     })
 
+        this.setState({ ...initialState })
+        handleClose()
+    }
+
+    onCancel = () => {
+        const { handleClose } = this.props
+        this.setState({ ...initialState })
         handleClose()
     }
 
     render() {
-        const { isOpen, handleClose, item: initItem } = this.props
+        const { isOpen } = this.props
         const { item } = this.state
-        // TODO: On submit, the initItem.title changes to `undefined` before closing, so setting fallback text
-        const dialogTitle = `Edit ${initItem.title || 'Item'}`
         return (
             <Dialog open={isOpen} onClose={this.clearAndClose} style={styles.dialog}>
-                <DialogTitle>{dialogTitle}</DialogTitle>
-                <form id="edit-form" onSubmit={this.onSubmit}>
+                <DialogTitle>Add New Item</DialogTitle>
+                <form id="add-form" onSubmit={this.onSubmit}>
                     <DialogContent>
                         <TextField
                             required
@@ -74,7 +86,7 @@ export default class EditDialog extends Component {
                             label="Title"
                             name="title"
                             style={styles.spacedInput}
-                            defaultValue={initItem.title}
+                            defaultValue={item.title}
                             onChange={this.onChange}
                         />
                         <TextField
@@ -83,7 +95,7 @@ export default class EditDialog extends Component {
                             label="Description"
                             name="description"
                             style={styles.spacedInput}
-                            defaultValue={initItem.description}
+                            defaultValue={item.description}
                             onChange={this.onChange}
                         />
                         <TextField
@@ -93,7 +105,7 @@ export default class EditDialog extends Component {
                             label="URL"
                             name="url"
                             style={styles.spacedInput}
-                            defaultValue={initItem.url}
+                            defaultValue={item.url}
                             onChange={this.onChange}
                         />
                         <TextField
@@ -102,7 +114,7 @@ export default class EditDialog extends Component {
                             label="Image URL"
                             name="imageUrl"
                             style={styles.spacedInput}
-                            defaultValue={initItem.imageUrl}
+                            defaultValue={item.imageUrl}
                             onChange={this.onChange}
                         />
                         <TextField
@@ -112,7 +124,8 @@ export default class EditDialog extends Component {
                             label="Group"
                             name="group"
                             style={styles.selectInput}
-                            value={item.group || ''}
+                            defaultValue={item.group || ''}
+                            value={item.group}
                             onChange={this.onChange}
                             >
                             {this.groups.map((group) => (
@@ -126,8 +139,8 @@ export default class EditDialog extends Component {
                         </TextField>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit" form="edit-form">Submit</Button>
+                        <Button onClick={this.onCancel}>Cancel</Button>
+                        <Button type="submit" form="add-form">Submit</Button>
                     </DialogActions>
             </form>
             </Dialog>
