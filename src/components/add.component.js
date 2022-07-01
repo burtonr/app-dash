@@ -44,22 +44,23 @@ export default class AddDialog extends Component {
     onChange = e => {
         const { name, value } = e.target;
         this.setState(prevState => ({ item: { ...prevState.item, [name]: value } }));
-      };
+    };
 
     onSubmit = (e) => {
         e.preventDefault();
-        const { handleClose } = this.props
+        const { handleClose, handleError } = this.props
         const { item: createdItem } = this.state
 
-        
+
         console.log(`Creating item: ${JSON.stringify(createdItem)}`)
-        // itemSvc.addItem(item._id, createdItem)
-        //     .then((res) => {
-        //         setUpdated(res.data.addedItem);
-        //     }, (err) => {
-        //         console.log('Error');
-        //         console.log(err);
-        //     })
+        itemSvc.addItem(createdItem)
+            .then((res) => {
+                console.log(`Add response data: ${JSON.stringify(res.data)}`)
+                // setUpdated(res.data.addedItem);
+            }, (err) => {
+                handleError(err.response)
+                return;
+            })
 
         this.setState({ ...initialState })
         handleClose(true)
@@ -127,22 +128,22 @@ export default class AddDialog extends Component {
                             defaultValue={item.group || ''}
                             value={item.group}
                             onChange={this.onChange}
-                            >
+                        >
                             {this.groups.map((group) => (
-                                    <MenuItem
-                                        key={group}
-                                        value={group}
-                                    >
+                                <MenuItem
+                                    key={group}
+                                    value={group}
+                                >
                                     {group}
-                                    </MenuItem>
-                                ))}
+                                </MenuItem>
+                            ))}
                         </TextField>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.onCancel}>Cancel</Button>
                         <Button type="submit" form="add-form">Submit</Button>
                     </DialogActions>
-            </form>
+                </form>
             </Dialog>
         );
     }

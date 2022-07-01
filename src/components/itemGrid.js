@@ -8,7 +8,7 @@ import itemSvc from '../services/item.service';
 export default class ItemGrid extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             items: [],
             editItem: {},
             editIsOpen: false,
@@ -24,27 +24,27 @@ export default class ItemGrid extends Component {
             this.getItems()
         }
     }
-    
+
     getItems = () => {
         itemSvc.getAllItems()
-        .then((response) => {
-            const data = response.data
-            // groups: [...new Set(data.map(x => x.group))]
-            this.setState({ items: data });
-        })
-        .catch(function (err) {
-            console.error(err);
-        })
+            .then((response) => {
+                const data = response.data
+                // groups: [...new Set(data.map(x => x.group))]
+                this.setState({ items: data });
+            })
+            .catch(function (err) {
+                console.error(err);
+            })
     }
 
     deleteItem = (id) => {
         console.log(`Deleting: ${JSON.stringify(id)}`)
-    //     adminSvc.deleteItem(id)
-    //         .then((response) => {
-    //             this.setState({
-    //                 items: this.state.items.filter((el) => el._id !== id),
-    //             });
-    //         });
+        //     adminSvc.deleteItem(id)
+        //         .then((response) => {
+        //             this.setState({
+        //                 items: this.state.items.filter((el) => el._id !== id),
+        //             });
+        //         });
     }
 
     editItem = (item) => {
@@ -66,7 +66,7 @@ export default class ItemGrid extends Component {
                     <ItemCard
                         item={currentItem}
                         isManaged={manageMode}
-                        editClicked={this.editItem }
+                        editClicked={this.editItem}
                         deleteClicked={this.deleteItem}
                     />
                 </Grid>
@@ -91,7 +91,7 @@ export default class ItemGrid extends Component {
                 >
                     {this.itemList()}
                 </Grid>
-                <EditDialog 
+                <EditDialog
                     isOpen={editIsOpen}
                     handleClose={this.closeEdit}
                     item={editItem}

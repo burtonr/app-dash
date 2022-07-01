@@ -4,6 +4,7 @@ import ItemGrid from "./components/itemGrid";
 import authService from "./services/auth.service";
 import LoginDialog from "./components/login.component";
 import AddDialog from "./components/add.component";
+import { Alert, Snackbar } from "@mui/material";
 
 class App extends Component {
     constructor(props) {
@@ -15,6 +16,8 @@ class App extends Component {
             currentUser: undefined,
             manageMode: false,
             itemAdded: 0,
+            showError: false,
+            errorMessage: '',
         }
     }
 
@@ -50,8 +53,21 @@ class App extends Component {
         }
     }
 
+    handleError = (errResponse) => {
+        // TODO: Additional status'. Move to separate external file for use elsewhere
+        if (errResponse.status == 401) {
+            this.setState({ showError: true, errorMessage: 'Not authorized. Log in, or contact the administrator' })
+        } else {
+            this.setState({ showError: true, errorMessage: errResponse.message })
+        }
+    }
+
+    handleErrorClose = () => {
+        this.setState({ showError: false, errorMessage: '' })
+    }
+
     render() {
-        const { openLogin, openAdd, manageMode, itemAdded } = this.state
+        const { openLogin, openAdd, manageMode, itemAdded, showError, errorMessage } = this.state
         return (
             <div>
                 <Navbar
@@ -61,7 +77,12 @@ class App extends Component {
                     manageClicked={this.handleManageClicked}
                 />
                 <LoginDialog isOpen={openLogin} />
-                <AddDialog isOpen={openAdd} handleClose={this.handleAddClosed} />
+                <AddDialog isOpen={openAdd} handleClose={this.handleAddClosed} handleError={this.handleError} />
+                <Snackbar open={showError} autoHideDuration={5000} onClose={this.handleErrorClose}>
+                    <Alert onClose={this.handleErrorClose} severity="warning">
+                        {errorMessage}
+                    </Alert>
+                </Snackbar>
                 <ItemGrid manageMode={manageMode} itemAdded={itemAdded} />
             </div>
         )
