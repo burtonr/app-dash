@@ -16,16 +16,6 @@ export default class ItemGrid extends Component {
     }
 
     componentDidMount() {
-        this.getItems()
-    }
-
-    componentDidUpdate = (prevProps) => {
-        if (this.props.itemAdded != prevProps.itemAdded) {
-            this.getItems()
-        }
-    }
-
-    getItems = () => {
         itemSvc.getAllItems()
             .then((response) => {
                 const data = response.data
@@ -37,14 +27,41 @@ export default class ItemGrid extends Component {
             })
     }
 
+    componentDidUpdate = (prevProps) => {
+        if (this.props.itemAdded != prevProps.itemAdded) {
+            // Slight delay to ensure the DB is updated before requesting
+            setTimeout(() => {
+                this.refreshItems()
+            }, 1000);
+        }
+    }
+
+    refreshItems = () => {
+        itemSvc.refreshItems()
+            .then((response) => {
+                const data = response.data
+                // groups: [...new Set(data.map(x => x.group))]
+                this.setState({ items: data });
+            })
+            .catch(function (err) {
+                console.error(err);
+            })
+    }
+
     deleteItem = (id) => {
-        console.log(`Deleting: ${JSON.stringify(id)}`)
-        //     adminSvc.deleteItem(id)
-        //         .then((response) => {
-        //             this.setState({
-        //                 items: this.state.items.filter((el) => el._id !== id),
-        //             });
-        //         });
+        const { handleError } = this.props
+        itemSvc.deleteItem(id)
+            .then(() => {
+                this.refreshItems()
+                // this.setState({
+                //     items: this.state.items.filter((el) => el._id !== id),
+                // });
+            })
+            .catch((err) => {
+                console.log(`Error response: ${JSON.stringify(err.response)}`)
+                console.log(`Err: ${JSON.stringify(err)}`)
+                handleError(err.response)
+            });
     }
 
     editItem = (item) => {
@@ -54,7 +71,7 @@ export default class ItemGrid extends Component {
     closeEdit = (shouldUpdate) => {
         this.setState(prevState => ({ ...prevState, editIsOpen: false, editItem: {} }));
         if (shouldUpdate)
-            this.getItems()
+            this.refreshItems()
     }
 
     itemList = () => {

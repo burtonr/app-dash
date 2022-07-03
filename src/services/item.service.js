@@ -8,6 +8,10 @@ class ItemService {
         return axios.get(API_ENDPOINT, { headers: authHeader() });
     }
 
+    refreshItems() {
+        return axios.get(API_ENDPOINT, { headers: { ['Cache-Control']: 'no-cache', ...authHeader() } })
+    }
+
     addItem(item) {
         return axios
             .post(API_ENDPOINT, item, { headers: authHeader() });

@@ -54,12 +54,18 @@ class App extends Component {
     }
 
     handleError = (errResponse) => {
-        // TODO: Additional status'. Move to separate external file for use elsewhere
-        if (errResponse.status == 401) {
-            this.setState({ showError: true, errorMessage: 'Not authorized. Log in, or contact the administrator' })
+        if (errResponse) {
+            // TODO: Additional status'. Move to separate external file for use elsewhere
+            if (errResponse.status == 401) {
+                this.setState({ showError: true, errorMessage: 'Not authorized. Log in, or contact the administrator' })
+            } else {
+                const message = errResponse.message ? errResponse.message : 'An unknown problem occurred. Contact the administrator'
+                this.setState({ showError: true, errorMessage: message })
+            }
         } else {
-            this.setState({ showError: true, errorMessage: errResponse.message })
+            this.setState({ showError: true, errorMessage: 'A system error occurred. Contact the administrator' })
         }
+
     }
 
     handleErrorClose = () => {
@@ -83,7 +89,7 @@ class App extends Component {
                         {errorMessage}
                     </Alert>
                 </Snackbar>
-                <ItemGrid manageMode={manageMode} itemAdded={itemAdded} />
+                <ItemGrid manageMode={manageMode} itemAdded={itemAdded} handleError={this.handleError} />
             </div>
         )
     }
