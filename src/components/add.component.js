@@ -51,11 +51,10 @@ export default class AddDialog extends Component {
         const { handleClose, handleError } = this.props
         const { item: createdItem } = this.state
 
-
-        console.log(`Creating item: ${JSON.stringify(createdItem)}`)
         itemSvc.addItem(createdItem)
             .then((res) => {
-                console.log(`Add response data: ${JSON.stringify(res.data)}`)
+                // TODO: Create global alert for success and error
+                console.log(`Add response data (DB response): ${JSON.stringify(res.data.dbResponse)}`)
                 // setUpdated(res.data.addedItem);
             }, (err) => {
                 handleError(err.response)
