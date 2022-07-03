@@ -37,24 +37,25 @@ export default class EditDialog extends Component {
     onChange = e => {
         const { name, value } = e.target;
         this.setState(prevState => ({ item: { ...prevState.item, [name]: value } }));
-      };
+    };
 
     onSubmit = (e) => {
         e.preventDefault();
         const { handleClose, item: initItem } = this.props
-        const { item } = this.state
-        const editedItem = { ...initItem, ...item}
+        const { item } = this.state //edited fields
+        const editedItem = { ...initItem, ...item }
 
-        console.log(`Editing existing item: ${JSON.stringify(editedItem.title)}`)
-        // itemSvc.updateItem(item._id, editedItem)
-        //     .then((res) => {
-        //         setUpdated(res.data.updatedItem);
-        //     }, (err) => {
-        //         console.log('Error');
-        //         console.log(err);
-        //     })
-
-        handleClose(true)
+        itemSvc.updateItem(editedItem._id, editedItem)
+            .then((res) => {
+                // TODO: Create global alert for success and error
+                console.log(`Edit response data (DB response): ${JSON.stringify(res.data.dbResponse)}`)
+                handleClose(true)
+            }, (err) => {
+                // TODO: Pass error response up to alert
+                console.log('Error');
+                console.log(err);
+                handleClose(false)
+            })
     }
 
     render() {
@@ -114,22 +115,22 @@ export default class EditDialog extends Component {
                             style={styles.selectInput}
                             value={item.group || ''}
                             onChange={this.onChange}
-                            >
+                        >
                             {this.groups.map((group) => (
-                                    <MenuItem
-                                        key={group}
-                                        value={group}
-                                    >
+                                <MenuItem
+                                    key={group}
+                                    value={group}
+                                >
                                     {group}
-                                    </MenuItem>
-                                ))}
+                                </MenuItem>
+                            ))}
                         </TextField>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => handleClose(false)}>Cancel</Button>
                         <Button type="submit" form="edit-form">Submit</Button>
                     </DialogActions>
-            </form>
+                </form>
             </Dialog>
         );
     }
