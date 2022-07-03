@@ -31,7 +31,7 @@ router.post('/', [mw.verifyToken, mw.isEditor], async (req, res) => {
         imageUrl: req.body.imageUrl,
         image: smImg,
     };
-    let insertResponse = await db.collection('apps').insertOne(newItem); 
+    let insertResponse = await db.collection('apps').insertOne(newItem);
     let dbItem = await db.collection('apps').findOne({ _id: ObjectId(insertResponse.insertedId) })
 
     let result = {
@@ -41,13 +41,14 @@ router.post('/', [mw.verifyToken, mw.isEditor], async (req, res) => {
     res.json(result);
 })
 
+// TODO: Change to PATCH and only change updated fields
 router.put('/:itemId', async (req, res) => {
-    let db_connect = dbo.getDataStore();
+    let db_connect = dbo.getDb();
 
     let smImg;
 
     if (req.body.imageUrl) {
-        smImg = await img.downloadAndResize(req.body.imageUrl);
+        smImg = await imgSvc.downloadAndResize(req.body.imageUrl);
     }
 
     let newValues = {
@@ -70,7 +71,7 @@ router.put('/:itemId', async (req, res) => {
 });
 
 router.delete('/:itemId', [mw.verifyToken, mw.isEditor], (req, res) => {
-    let db_connect = dbo.getDataStore();
+    let db_connect = dbo.getDb();
     db_connect
         .collection('apps')
         .deleteOne({ _id: ObjectId(req.params.itemId) }, (err, obj) => {
