@@ -6,6 +6,7 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true,
     serverApi: ServerApiVersion.v1,
 })
+const disableAuth = process.env.DISABLE_AUTH
 
 var _db;
 
@@ -20,16 +21,22 @@ module.exports = {
         })
     },
     initialize: async function () {
-        // TODO: Add env var for "open access" OR admin only
-        let addedRoles = await checkAndAddRoles()
-        let addedAdmin = await checkAndAddAdmin()
+        console.log(`DISABLE_AUTH: ${disableAuth}`)
+        if (disableAuth !== 'true') {
+            console.log('>>> running the setup')
+            let addedRoles = await checkAndAddRoles()
+            let addedAdmin = await checkAndAddAdmin()
 
-        console.info(`Roles added? ${addedRoles} | Admin user added? ${addedAdmin}`)
+            console.info(`Roles added? ${addedRoles} | Admin user added? ${addedAdmin}`)
 
-        if (!addedRoles && !addedAdmin)
-            console.info('MongoDB already initialized. No changes made')
-        
-        console.info('MongoDB initialization complete')
+            if (!addedRoles && !addedAdmin)
+                console.info('MongoDB already initialized. No changes made')
+
+            console.info('MongoDB initialization complete')
+        } else {
+            console.info('DISABLE_AUTH set to true. No MongoDB initialization required')
+        }
+
     },
     getDb: function () {
         return _db
@@ -50,9 +57,9 @@ async function checkAndAddRoles() {
 }
 
 async function checkAndAddAdmin() {
-    let adminRole =  await _db.collection('roles').findOne({name: 'admin'})
+    let adminRole = await _db.collection('roles').findOne({ name: 'admin' })
     let usersCollection = _db.collection('users')
-    let adminUser = await usersCollection.findOne({"role": adminRole._id})
+    let adminUser = await usersCollection.findOne({ "role": adminRole._id })
     if (!adminUser) {
         await usersCollection.insertOne({
             username: 'admin',
