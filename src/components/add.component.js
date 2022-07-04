@@ -28,7 +28,6 @@ const initialState = {
         description: '',
         url: '',
         imageUrl: '',
-        group: '',
     }
 }
 
@@ -37,9 +36,6 @@ export default class AddDialog extends Component {
         super(props)
         this.state = initialState
     }
-
-    // TODO: Get list of groups from API/DB
-    groups = ['', 'homelab', 'media', 'external']
 
     onChange = e => {
         const { name, value } = e.target;
@@ -117,26 +113,6 @@ export default class AddDialog extends Component {
                             defaultValue={item.imageUrl}
                             onChange={this.onChange}
                         />
-                        <TextField
-                            fullWidth
-                            select
-                            id="item-group-select"
-                            label="Group"
-                            name="group"
-                            style={styles.selectInput}
-                            defaultValue={item.group || ''}
-                            value={item.group}
-                            onChange={this.onChange}
-                        >
-                            {this.groups.map((group) => (
-                                <MenuItem
-                                    key={group}
-                                    value={group}
-                                >
-                                    {group}
-                                </MenuItem>
-                            ))}
-                        </TextField>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.onCancel}>Cancel</Button>

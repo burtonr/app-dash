@@ -19,7 +19,6 @@ export default class ItemGrid extends Component {
         itemSvc.getAllItems()
             .then((response) => {
                 const data = response.data
-                // groups: [...new Set(data.map(x => x.group))]
                 this.setState({ items: data });
             })
             .catch(function (err) {
@@ -40,7 +39,6 @@ export default class ItemGrid extends Component {
         itemSvc.refreshItems()
             .then((response) => {
                 const data = response.data
-                // groups: [...new Set(data.map(x => x.group))]
                 this.setState({ items: data });
             })
             .catch(function (err) {
@@ -53,9 +51,6 @@ export default class ItemGrid extends Component {
         itemSvc.deleteItem(id)
             .then(() => {
                 this.refreshItems()
-                // this.setState({
-                //     items: this.state.items.filter((el) => el._id !== id),
-                // });
             })
             .catch((err) => {
                 console.log(`Error response: ${JSON.stringify(err.response)}`)

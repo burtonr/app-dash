@@ -31,9 +31,6 @@ export default class EditDialog extends Component {
         }
     }
 
-    // TODO: Get list of groups from API/DB
-    groups = ['', 'homelab', 'media', 'external']
-
     onChange = e => {
         const { name, value } = e.target;
         this.setState(prevState => ({ item: { ...prevState.item, [name]: value } }));
@@ -106,25 +103,6 @@ export default class EditDialog extends Component {
                             defaultValue={initItem.imageUrl}
                             onChange={this.onChange}
                         />
-                        <TextField
-                            fullWidth
-                            select
-                            id="item-group-select"
-                            label="Group"
-                            name="group"
-                            style={styles.selectInput}
-                            value={item.group || ''}
-                            onChange={this.onChange}
-                        >
-                            {this.groups.map((group) => (
-                                <MenuItem
-                                    key={group}
-                                    value={group}
-                                >
-                                    {group}
-                                </MenuItem>
-                            ))}
-                        </TextField>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => handleClose(false)}>Cancel</Button>
