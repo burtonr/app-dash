@@ -7,7 +7,7 @@
     "start": "node -r dotenv/config server/server.js",
     "start:prod": "node server/server.js",
     "build": "webpack",
-    "watch": "webpack --watch --mode=development & npm start",
+    "watch": "webpack --watch --mode=development & nodemon -r dotenv/config server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Burton Rheutan",
@@ -34,6 +34,7 @@
     "@babel/preset-react": "^7.17.12",
     "babel-loader": "^8.2.5",
     "dotenv": "^16.0.1",
+    "nodemon": "^2.0.18",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.1"
