@@ -21,7 +21,6 @@ module.exports = {
         })
     },
     initialize: async function () {
-        console.log(`DISABLE_AUTH: ${disableAuth}`)
         if (disableAuth !== 'true') {
             console.log('>>> running the setup')
             let addedRoles = await checkAndAddRoles()

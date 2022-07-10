@@ -13,19 +13,10 @@ class App extends Component {
         this.state = {
             openLogin: false,
             openAdd: false,
-            currentUser: undefined,
             manageMode: false,
             itemAdded: 0,
             showError: false,
             errorMessage: '',
-        }
-    }
-
-    componentDidMount() {
-        const user = authService.getCurrentUser()
-
-        if (user) {
-            this.setState(prevState => ({ ...prevState, currentUser: user }))
         }
     }
 
