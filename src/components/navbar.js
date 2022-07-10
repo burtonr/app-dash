@@ -26,8 +26,8 @@ export default class Navbar extends Component {
         };
     }
 
-    componentDidMount() {
-        const user = authService.getCurrentUser();
+    componentDidMount = async () => {
+        const user = await authService.getCurrentUser();
         if (user) {
             this.setState({ currentUser: user })
         }
