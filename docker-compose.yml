@@ -6,17 +6,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: secretPassword
-  # app_dash:
-  #   image: app-dash-api:latest
-  #   build:
-  #     context: ./server
-  #   restart: always
-  #   expose:
-  #     - 80
-  #   ports:
-  #     - "9090:8080"
-  #   depends_on:
-  #     - mongo
+    ports:
+      - 27017:27017
 networks:
   backend:
   frontend:
