@@ -22,7 +22,7 @@ export const apiSlice = createApi({
         }),
         editItem: builder.mutation({
             query: (item) => ({
-                url: '/dash',
+                url: `/dash/${item.id}`,
                 method: 'PUT',
                 body: item
             }),

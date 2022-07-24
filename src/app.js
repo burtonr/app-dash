@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Navbar from "./app/navbar";
+import { Navbar } from "./app/navbar";
 import { ItemGrid } from "./features/items/itemGrid";
 import authService from "./services/auth.service";
 import LoginDialog from "./components/login.component";
-import AddDialog from "./components/add.component";
+import { CreateDialog } from './features/dialog/createDialog'
 import { Alert, Snackbar } from "@mui/material";
 
 class App extends Component {
@@ -74,7 +74,7 @@ class App extends Component {
                     manageClicked={this.handleManageClicked}
                 />
                 <LoginDialog isOpen={openLogin} />
-                <AddDialog isOpen={openAdd} handleClose={this.handleAddClosed} handleError={this.handleError} />
+                <CreateDialog handleClose={this.handleAddClosed} handleError={this.handleError} />
                 <Snackbar open={showError} autoHideDuration={5000} onClose={this.handleErrorClose}>
                     <Alert onClose={this.handleErrorClose} severity="warning">
                         {errorMessage}

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
     Avatar,
     Card,
@@ -12,7 +12,6 @@ import { Delete, Edit, Label } from '@mui/icons-material';
 
 export const ItemCard = (item) => {
     const { item: data } = item
-    console.log(`ItemCard -> item: ${JSON.stringify(data)}`)
     const isManaged = false
     const getCardHeight = () => {
         // const { isManaged } = this.props
