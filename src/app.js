@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Navbar from "./components/navbar";
-import ItemGrid from "./components/itemGrid";
+import Navbar from "./app/navbar";
+import { ItemGrid } from "./features/items/itemGrid";
 import authService from "./services/auth.service";
 import LoginDialog from "./components/login.component";
 import AddDialog from "./components/add.component";
