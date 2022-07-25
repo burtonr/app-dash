@@ -6,10 +6,10 @@ const itemsSlice = createSlice({
     initialState: [],
     reducers: {
         add: (state, action) => {
-            state.items.push(action.item)
+            state.push(action.item)
         },
         remove: (state, action) => {
-            state.items.filter(x => x.id !== action.item.id)
+            state.filter(x => x.id !== action.item.id)
         }
     },
     extraReducers(builder) {
