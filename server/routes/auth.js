@@ -16,6 +16,7 @@ router.get('/init', async (req, res) => {
 })
 
 router.post('/signin', async (req, res) => {
+    // TODO: Add check for "authDisabled" to skip signin
     const db = dbo.getDb()
     let foundUser = await db.collection('users').findOne({ username: req.body.username })
     if (foundUser) {
@@ -30,10 +31,12 @@ router.post('/signin', async (req, res) => {
                 accessToken: token
             })
             return
+        } else {
+            res.status(401).send({ message: "Username or password is not valid" })
         }
+    } else {
+        res.status(400).send({ message: "Username does not exist" })
     }
-
-    res.status(401).send({ message: "Username or password is not valid" })
 })
 
 // TODO: Add password reset route

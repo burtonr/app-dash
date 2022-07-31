@@ -15,26 +15,17 @@ import {
     Menu,
     PlaylistAdd
 } from '@mui/icons-material'
-import authService from "../services/auth.service";
 import { useDispatch, useSelector } from "react-redux";
-import { openCreate } from '../features/dialog/dialogSlice'
+import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
 
 export const Navbar = () => {
 
     // TODO: useSelector(userRole)
     const isEditor = true
-    const currentUser = true
+    const currentUser = false
     const manageMode = true
 
     const dispatch = useDispatch()
-
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         currentUser: undefined,
-    //         manageMode: false
-    //     };
-    // }
 
     // componentDidMount = async () => {
     //     const user = await authService.getCurrentUser();
@@ -59,6 +50,10 @@ export const Navbar = () => {
         dispatch(openCreate())
     }
 
+    const loginClicked = () => {
+        dispatch(openSignIn())
+    }
+
     const logout = () => {
         console.log('Logging out...');
         // const { logoutClicked } = this.props
@@ -67,8 +62,6 @@ export const Navbar = () => {
     }
 
     return (
-        // const { currentUser, manageMode } = this.state
-        // const { loginClicked, addClicked } = this.props
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>

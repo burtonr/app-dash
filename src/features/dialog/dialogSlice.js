@@ -6,7 +6,7 @@ const dialogsSlice = createSlice({
         editOpen: false,
         editItem: {},
         createOpen: false,
-        loginOpen: false
+        signInOpen: false
     },
     reducers: {
         openEdit: (state, action) => {
@@ -23,12 +23,15 @@ const dialogsSlice = createSlice({
         closeCreate: (state) => {
             state.createOpen = false
         },
-        openLogin: (state) => {
-            state.loginOpen = true
+        openSignIn: (state) => {
+            state.signInOpen = true
+        },
+        closeSignIn: (state) => {
+            state.signInOpen = false
         }
     }
 })
 
-export const { openEdit, closeEdit, openCreate, closeCreate, openLogin } = dialogsSlice.actions
+export const { openEdit, closeEdit, openCreate, closeCreate, openSignIn, closeSignIn } = dialogsSlice.actions
 
 export default dialogsSlice.reducer

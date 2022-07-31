@@ -2,11 +2,18 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const apiSlice = createApi({
     reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-    tagTypes: ['Item'],
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/dash' }),
+    tagTypes: ['Item', 'User'],
     endpoints: (builder) => ({
+        signIn: builder.mutation({
+            query: (creds) => ({
+                url: '/auth/signin',
+                method: 'POST',
+                body: { ...creds }
+            }),
+        }),
         getItems: builder.query({
-            query: () => '/dash',
+            query: () => '/',
             providesTags: (result = [], error, arg) => [
                 'Item',
                 ...result.map(({ id }) => ({ type: 'Item', id }))
@@ -14,7 +21,7 @@ export const apiSlice = createApi({
         }),
         addItem: builder.mutation({
             query: (newItem) => ({
-                url: '/dash',
+                url: '/',
                 method: 'POST',
                 body: newItem
             }),
@@ -22,7 +29,7 @@ export const apiSlice = createApi({
         }),
         editItem: builder.mutation({
             query: (item) => ({
-                url: `/dash/${item.id}`,
+                url: `/${item.id}`,
                 method: 'PUT',
                 body: item
             }),
@@ -30,7 +37,7 @@ export const apiSlice = createApi({
         }),
         deleteItem: builder.mutation({
             query: (id) => ({
-                url: `/dash/${id}`,
+                url: `/${id}`,
                 method: 'DELETE',
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'Item', id: arg.id }]
@@ -39,6 +46,7 @@ export const apiSlice = createApi({
 })
 
 export const {
+    useSignInMutation,
     useGetItemsQuery,
     useAddItemMutation,
     useEditItemMutation,

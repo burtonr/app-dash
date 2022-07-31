@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import { Navbar } from "./app/navbar";
 import { ItemGrid } from "./features/items/itemGrid";
-import authService from "./services/auth.service";
-import LoginDialog from "./components/login.component";
 import { CreateDialog } from './features/dialog/createDialog'
-import { Alert, Snackbar } from "@mui/material";
+import { SignInDialog } from './features/dialog/signInDialog'
 
 class App extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            openLogin: false,
             openAdd: false,
             manageMode: false,
             itemAdded: 0,
@@ -20,67 +17,25 @@ class App extends Component {
         }
     }
 
-    handleLoginClicked = () => {
-        this.setState(prevState => ({ ...prevState, openLogin: true }))
-    }
-
-    handleLogoutClicked = () => {
-        authService.logout()
-    }
-
-    handleManageClicked = () => {
-        this.setState(prevState => ({ ...prevState, manageMode: !prevState.manageMode }))
-    }
-
-    handleAddClicked = () => {
-        this.setState(prevState => ({ ...prevState, openAdd: true }))
-    }
-
-    handleAddClosed = (shouldUpdate) => {
-        if (shouldUpdate) {
-            this.setState({ openAdd: false, itemAdded: this.state.itemAdded + 1 })
-        } else {
-            this.setState({ openAdd: false })
-        }
-    }
-
-    handleError = (errResponse) => {
-        if (errResponse) {
-            // TODO: Additional status'. Move to separate external file for use elsewhere
-            if (errResponse.status == 401) {
-                this.setState({ showError: true, errorMessage: 'Not authorized. Log in, or contact the administrator' })
-            } else {
-                const message = errResponse.message ? errResponse.message : 'An unknown problem occurred. Contact the administrator'
-                this.setState({ showError: true, errorMessage: message })
-            }
-        } else {
-            this.setState({ showError: true, errorMessage: 'A system error occurred. Contact the administrator' })
-        }
-
-    }
-
     handleErrorClose = () => {
         this.setState({ showError: false, errorMessage: '' })
     }
 
     render() {
-        const { openLogin, openAdd, manageMode, itemAdded, showError, errorMessage } = this.state
+        const { manageMode, itemAdded, showError, errorMessage } = this.state
         return (
             <div>
-                <Navbar
-                    loginClicked={this.handleLoginClicked}
-                    logoutClicked={this.handleLogoutClicked}
-                    addClicked={this.handleAddClicked}
-                    manageClicked={this.handleManageClicked}
-                />
-                <LoginDialog isOpen={openLogin} />
-                <CreateDialog handleClose={this.handleAddClosed} handleError={this.handleError} />
-                <Snackbar open={showError} autoHideDuration={5000} onClose={this.handleErrorClose}>
+                <Navbar />
+                <SignInDialog />
+                <CreateDialog />
+                {/* TODO: Create snackbar feature with error handling middleware */}
+                {/* ref: https://redux-toolkit.js.org/rtk-query/usage/error-handling#handling-errors-at-a-macro-level */}
+                {/* <Snackbar open={showError} autoHideDuration={5000} onClose={this.handleErrorClose}>
                     <Alert onClose={this.handleErrorClose} severity="warning">
                         {errorMessage}
                     </Alert>
-                </Snackbar>
-                <ItemGrid manageMode={manageMode} itemAdded={itemAdded} handleError={this.handleError} />
+                </Snackbar> */}
+                <ItemGrid manageMode={manageMode} itemAdded={itemAdded} />
             </div>
         )
     }
