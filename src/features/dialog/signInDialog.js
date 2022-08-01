@@ -25,7 +25,7 @@ const styles = {
 export const SignInDialog = () => {
     const dispatch = useDispatch()
     const isOpen = useSelector(state => state.dialogs.signInOpen)
-    const [signIn] = useSignInMutation()
+    const [signIn, { error }] = useSignInMutation()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -38,9 +38,21 @@ export const SignInDialog = () => {
         dispatch(closeSignIn())
     }
 
-    const onSignInClicked = async () => {
-        if (username && password) {
-            await signIn({ username, password })
+    const onSignInClicked = async (e) => {
+        // DEV: Use .preventDefault() AND .unwrap() as the Form Dialog closes before the request completes
+        // causing a fetch NetworkError that is not otherwise caught by RTK Query
+        e.preventDefault();
+        if (username && password) {                        
+            await signIn({ username, password }).unwrap()
+            .then(res => {
+                // TODO: Handle response
+                clearAndClose()
+            })
+            .catch(err => {
+                // TODO: Handle errors
+                console.log(`.catch -> Error: ${JSON.stringify(error)}`)
+                console.log(`.catch -> Err: ${JSON.stringify(err)}`)
+            })
         }
     }
 
