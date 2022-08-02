@@ -4,6 +4,7 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
+    DialogContentText,
     DialogActions,
     TextField
 } from '@mui/material'
@@ -28,6 +29,7 @@ export const SignInDialog = () => {
     const [signIn, { error }] = useSignInMutation()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     const onUsernameChanged = (e) => setUsername(e.target.value)
     const onPasswordChanged = (e) => setPassword(e.target.value)
@@ -35,6 +37,7 @@ export const SignInDialog = () => {
     const clearAndClose = () => {
         setUsername('')
         setPassword('')
+        setErrorMessage('')
         dispatch(closeSignIn())
     }
 
@@ -42,17 +45,15 @@ export const SignInDialog = () => {
         // DEV: Use .preventDefault() AND .unwrap() as the Form Dialog closes before the request completes
         // causing a fetch NetworkError that is not otherwise caught by RTK Query
         e.preventDefault();
-        if (username && password) {                        
+        if (username && password) {
             await signIn({ username, password }).unwrap()
-            .then(res => {
-                // TODO: Handle response
-                clearAndClose()
-            })
-            .catch(err => {
-                // TODO: Handle errors
-                console.log(`.catch -> Error: ${JSON.stringify(error)}`)
-                console.log(`.catch -> Err: ${JSON.stringify(err)}`)
-            })
+                .then(res => {
+                    // TODO: Handle response
+                    clearAndClose()
+                })
+                .catch(err => {
+                    setErrorMessage(error?.data?.message ?? err?.data?.message)
+                })
         }
     }
 
@@ -79,6 +80,7 @@ export const SignInDialog = () => {
                         style={styles.inputField}
                     />
                 </DialogContent>
+                {errorMessage && <DialogContentText style={styles.errorMessage}><span>{errorMessage}</span></DialogContentText>}
                 <DialogActions>
                     <Button type="submit" form="login-form">Login</Button>
                 </DialogActions>
