@@ -3,24 +3,23 @@ import { apiSlice } from "../api/apiSlice"
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: {
-        _id: '',
-        username: '',
-        role: '',
-        accessToken: ''
-    },
+    initialState: {},
     reducers: {
-        signout: (state) => {
+        signOut: (state) => {
             state = initialState
         }
     },
     extraReducers(builder) {
-        builder.addMatcher(apiSlice.endpoints.signin.matchFulfilled, (state, { payload }) => {
-            state = payload
+        builder.addMatcher(apiSlice.endpoints.signIn.matchFulfilled, (state, { payload }) => {
+            // DEV: Spread operator does not fill the state:  state = { ...payload } results in empty state
+            state._id = payload._id
+            state.username = payload.username
+            state.role = payload.role
+            state.accessToken = payload.accessToken
         })
     }
 })
 
-export const { signout } = userSlice.actions
+export const { signOut } = userSlice.actions
 
 export default userSlice.reducer

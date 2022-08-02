@@ -17,6 +17,7 @@ import {
 } from '@mui/icons-material'
 import { useDispatch, useSelector } from "react-redux";
 import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
+import { signOut } from "../features/authentication/authSlice";
 
 export const Navbar = () => {
 
@@ -56,6 +57,7 @@ export const Navbar = () => {
 
     const logout = () => {
         console.log('Logging out...');
+        dispatch(signOut)
         // const { logoutClicked } = this.props
         // this.setState({ currentUser: undefined })
         // logoutClicked()

@@ -11,6 +11,10 @@ export const apiSlice = createApi({
                 method: 'POST',
                 body: { ...creds }
             }),
+            providesTags: (result = {}, error, arg) => [
+                'User',
+                ...result.map(({ _id }) => ({ type: 'User', id: _id }))
+            ]
         }),
         getItems: builder.query({
             query: () => '/',
