@@ -27,6 +27,7 @@ export const CreateDialog = () => {
     const isOpen = useSelector(state => state.dialogs.createOpen)
     const [addItem, { isLoading, isSuccess, isError, error }] = useAddItemMutation()
     const dispatch = useDispatch()
+    const [errorMessage, setErrorMessage] = useState('')
 
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -46,11 +47,18 @@ export const CreateDialog = () => {
         dispatch(closeCreate())
     }
 
-    const onSaveClicked = async () => {
+    const onSaveClicked = async (e) => {
+        // DEV: Use .preventDefault() AND .unwrap() as the Form Dialog closes before the request completes
+        // causing a fetch NetworkError that is not otherwise caught by RTK Query
+        e.preventDefault();
         if (title && url) {
-            await addItem({ title, description, url, imageUrl })
-            if (isSuccess)
-                clearAndClose()
+            await addItem({ title, description, url, imageUrl }).unwrap()
+                .then(res => {
+                    clearAndClose()
+                })
+                .catch(err => {
+                    setErrorMessage(error?.data?.message ?? err?.data?.message)
+                })
         }
     }
 
@@ -99,7 +107,7 @@ export const CreateDialog = () => {
                     />
                     {/* TODO: Add loading progress */}
                     {/* TODO: Make this pretty && prevent close*/}
-                    {isError && <div>Error: `${JSON.stringify(error)}`</div>}
+                    {errorMessage && <div>Error: `${JSON.stringify(errorMessage)}`</div>}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={clearAndClose}>Cancel</Button>
