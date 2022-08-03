@@ -1,17 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { apiSlice } from "../api/apiSlice"
 
+const initialState = {}
+
 const userSlice = createSlice({
     name: 'user',
-    initialState: {},
+    initialState,
     reducers: {
-        signOut: (state) => {
-            state = initialState
+        signOut: () => {
+            return initialState
         }
     },
     extraReducers(builder) {
         builder.addMatcher(apiSlice.endpoints.signIn.matchFulfilled, (state, { payload }) => {
-            // DEV: Spread operator does not fill the state:  state = { ...payload } results in empty state
             state._id = payload._id
             state.username = payload.username
             state.role = payload.role

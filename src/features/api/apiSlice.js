@@ -2,7 +2,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const apiSlice = createApi({
     reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: '/api/dash' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: '/api/dash',
+        prepareHeaders: (headers, { getState }) => {
+            const token = getState().user.accessToken
+            if (token)
+                headers.set('x-access-token', token)
+
+            return headers
+        }
+    }),
     tagTypes: ['Item', 'User'],
     endpoints: (builder) => ({
         signIn: builder.mutation({

@@ -20,25 +20,12 @@ import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
 import { signOut } from "../features/authentication/authSlice";
 
 export const Navbar = () => {
-
-    // TODO: useSelector(userRole)
-    const isEditor = true
-    const currentUser = false
+    const currentUser = useSelector(state => state.user)
     const manageMode = true
 
     const dispatch = useDispatch()
 
-    // componentDidMount = async () => {
-    //     const user = await authService.getCurrentUser();
-    //     if (user) {
-    //         this.setState({ currentUser: user })
-    //     }
-    // }
-
-    // isEditor = () => {
-    //     const { currentUser } = this.state
-    //     return currentUser && (currentUser.role == 'admin' || currentUser.role == 'editor')
-    // }
+    const isEditor = currentUser && (currentUser.role == 'admin' || currentUser.role == 'editor')
 
     const manageClicked = () => {
         // const { manageClicked } = this.props
@@ -51,16 +38,12 @@ export const Navbar = () => {
         dispatch(openCreate())
     }
 
-    const loginClicked = () => {
+    const signInClicked = () => {
         dispatch(openSignIn())
     }
 
-    const logout = () => {
-        console.log('Logging out...');
-        dispatch(signOut)
-        // const { logoutClicked } = this.props
-        // this.setState({ currentUser: undefined })
-        // logoutClicked()
+    const signOutClicked = () => {
+        dispatch(signOut())
     }
 
     return (
@@ -84,12 +67,12 @@ export const Navbar = () => {
                             <Button color="inherit" onClick={addClicked}><PlaylistAdd /></Button>
                         </Tooltip>
                     }
-                    {currentUser ?
-                        <Tooltip title="Logout">
-                            <Button color="inherit" onClick={logout}><Logout /></Button>
+                    {currentUser?.username ?
+                        <Tooltip title="Sign Out">
+                            <Button color="inherit" onClick={signOutClicked}><Logout /></Button>
                         </Tooltip> :
-                        <Tooltip title="Login">
-                            <Button color="inherit" onClick={loginClicked}><Login /></Button>
+                        <Tooltip title="Sign In">
+                            <Button color="inherit" onClick={signInClicked}><Login /></Button>
                         </Tooltip>
                     }
                 </Toolbar>
