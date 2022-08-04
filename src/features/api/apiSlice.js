@@ -14,6 +14,9 @@ export const apiSlice = createApi({
     }),
     tagTypes: ['Item', 'User'],
     endpoints: (builder) => ({
+        getSettings: builder.query({
+            query: () => '/settings'
+        }),
         signIn: builder.mutation({
             query: (creds) => ({
                 url: '/auth/signin',
@@ -59,9 +62,11 @@ export const apiSlice = createApi({
 })
 
 export const {
+    useGetSettingsQuery,
     useSignInMutation,
     useGetItemsQuery,
     useAddItemMutation,
     useEditItemMutation,
-    useDeleteItemMutation
+    useDeleteItemMutation,
+    usePrefetch
 } = apiSlice
