@@ -17,7 +17,7 @@ import {
 } from '@mui/icons-material'
 import { useDispatch, useSelector } from "react-redux";
 import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
-import { signOut } from "../features/authentication/authSlice";
+import { signOut } from "../features/user/userSlice";
 
 export const Navbar = () => {
     const currentUser = useSelector(state => state.user)
