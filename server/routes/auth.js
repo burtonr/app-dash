@@ -4,16 +4,6 @@ const dbo = require('../db/conn')
 const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
 const apiKey = process.env.API_KEY
-const disableAuth = process.env.DISABLE_AUTH
-
-router.get('/init', async (req, res) => {
-    const status = {
-        authDisabled: disableAuth,
-        adminOnly: false, // TODO: Future use
-    }
-    res.send(status)
-
-})
 
 router.post('/signin', async (req, res) => {
     // TODO: Add check for "authDisabled" to skip signin

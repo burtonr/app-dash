@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json())
 
 app.use(express.static(path.join(__dirname, '..', 'public')))
+app.use('/api/dash/settings', routes.settingsRoutes)
 app.use('/api/dash/auth', routes.authRoutes)
 app.use('/api/dash/admin', routes.adminRoutes)
 app.use('/api/dash', routes.dashRoutes)
