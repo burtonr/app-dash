@@ -8,11 +8,8 @@ const appSlice = createSlice({
         manageMode: false
     },
     reducers: {
-        setManageMode: (state) => {
-            state.manageMode = true
-        },
-        setViewMode: (state) => {
-            state.manageMode = false
+        toggleManageMode: (state) => {
+            state.manageMode = !state.manageMode
         }
     },
     extraReducers(builder) {
@@ -22,6 +19,6 @@ const appSlice = createSlice({
     }
 })
 
-export const { setManageMode, setViewMode } = appSlice.actions
+export const { toggleManageMode } = appSlice.actions
 
 export default appSlice.reducer

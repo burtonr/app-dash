@@ -16,22 +16,25 @@ import {
     PlaylistAdd
 } from '@mui/icons-material'
 import { useDispatch, useSelector } from "react-redux";
+import { toggleManageMode } from "../features/app/appSlice";
 import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
 import { signOut } from "../features/user/userSlice";
 
 export const Navbar = () => {
+    const appSettings = useSelector(state => state.app)
     const currentUser = useSelector(state => state.user)
-    const manageMode = true
 
     const dispatch = useDispatch()
 
-    const isEditor = currentUser && (currentUser.role == 'admin' || currentUser.role == 'editor')
+    const isEditor = () => {
+        if (appSettings.authDisabled)
+            return true
+
+        return currentUser && (currentUser.role == 'admin' || currentUser.role == 'editor')
+    }
 
     const manageClicked = () => {
-        // const { manageClicked } = this.props
-
-        // this.setState(prevState => ({ ...prevState, manageMode: !prevState.manageMode }))
-        // manageClicked()
+        dispatch(toggleManageMode())
     }
 
     const addClicked = () => {
@@ -46,6 +49,20 @@ export const Navbar = () => {
         dispatch(signOut())
     }
 
+    const signInOutButton = () => {
+        if (appSettings.authDisabled)
+            return
+
+        if (currentUser.username)
+            return (<Tooltip title="Sign Out">
+                <Button color="inherit" onClick={signOutClicked}><Logout /></Button>
+            </Tooltip>)
+        else
+            return (<Tooltip title="Sign In">
+                <Button color="inherit" onClick={signInClicked}><Login /></Button>
+            </Tooltip>)
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -53,8 +70,8 @@ export const Navbar = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Button color="inherit" component={NavLink} to="/">App Dash</Button>
                     </Typography>
-                    {isEditor &&
-                        (manageMode ?
+                    {isEditor() &&
+                        (appSettings.manageMode ?
                             <Tooltip title="View">
                                 <Button color="inherit" onClick={manageClicked}><Menu /></Button>
                             </Tooltip> :
@@ -62,19 +79,12 @@ export const Navbar = () => {
                                 <Button color="inherit" onClick={manageClicked}><MenuOpen /></Button>
                             </Tooltip>)
                     }
-                    {isEditor &&
+                    {isEditor() &&
                         <Tooltip title="Add Item">
                             <Button color="inherit" onClick={addClicked}><PlaylistAdd /></Button>
                         </Tooltip>
                     }
-                    {currentUser?.username ?
-                        <Tooltip title="Sign Out">
-                            <Button color="inherit" onClick={signOutClicked}><Logout /></Button>
-                        </Tooltip> :
-                        <Tooltip title="Sign In">
-                            <Button color="inherit" onClick={signInClicked}><Login /></Button>
-                        </Tooltip>
-                    }
+                    {signInOutButton()}
                 </Toolbar>
             </AppBar>
         </Box>
