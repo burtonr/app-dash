@@ -43,13 +43,13 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['Item']
         }),
-        editItem: builder.mutation({
-            query: (item) => ({
-                url: `/${item.id}`,
+        updateItem: builder.mutation({
+            query: ({ itemId, updatedItem }) => ({
+                url: `/${itemId}`,
                 method: 'PUT',
-                body: item
+                body: { ...updatedItem }
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'Item', id: arg.item.id }]
+            invalidatesTags: (result, error, arg) => [{ type: 'Item', id: arg.itemId }]
         }),
         deleteItem: builder.mutation({
             query: (id) => ({
@@ -66,7 +66,7 @@ export const {
     useSignInMutation,
     useGetItemsQuery,
     useAddItemMutation,
-    useEditItemMutation,
+    useUpdateItemMutation,
     useDeleteItemMutation,
     usePrefetch
 } = apiSlice

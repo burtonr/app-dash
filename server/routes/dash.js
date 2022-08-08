@@ -21,7 +21,11 @@ router.post('/', [mw.verifyToken, mw.isEditor], async (req, res) => {
     let smImg;
 
     if (req.body.imageUrl) {
-        smImg = await imgSvc.downloadAndResize(req.body.imageUrl);
+        try {
+            image = await imgSvc.downloadAndResize(req.body.imageUrl);
+        } catch (err) {
+            console.log('Unable to resize item image')
+        }
     }
 
     let newItem = {
@@ -45,10 +49,16 @@ router.post('/', [mw.verifyToken, mw.isEditor], async (req, res) => {
 router.put('/:itemId', async (req, res) => {
     let db_connect = dbo.getDb();
 
-    let smImg;
+    // TODO: Pull item from DB first, then compare the imageUrls
+    // to determine if it's changed to re-download
+    let image = req.body.image;
 
-    if (req.body.imageUrl) {
-        smImg = await imgSvc.downloadAndResize(req.body.imageUrl);
+    if (!image && req.body.imageUrl) {
+        try {
+            image = await imgSvc.downloadAndResize(req.body.imageUrl);
+        } catch (err) {
+            console.log('Unable to resize item image')
+        }
     }
 
     let newValues = {
@@ -57,9 +67,10 @@ router.put('/:itemId', async (req, res) => {
             description: req.body.description,
             url: req.body.url,
             imageUrl: req.body.imageUrl,
-            image: smImg,
+            image,
         },
     };
+
     let updateResponse = await db_connect.collection('apps').updateOne({ _id: ObjectId(req.params.itemId) }, newValues);
     let dbItem = await db_connect.collection('apps').findOne({ _id: ObjectId(req.params.itemId) })
 

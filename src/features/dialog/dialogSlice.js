@@ -11,7 +11,7 @@ const dialogsSlice = createSlice({
     reducers: {
         openEdit: (state, action) => {
             state.editOpen = true
-            state.editItem = action.item
+            state.editItem = action.payload
         },
         closeEdit: (state) => {
             state.editOpen = false

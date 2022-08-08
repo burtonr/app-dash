@@ -9,14 +9,15 @@ import {
 } from "@mui/material";
 
 import { Delete, Edit, Label } from '@mui/icons-material';
+import { useDispatch, useSelector } from "react-redux";
+import { openEdit } from "../dialog/dialogSlice";
 
 export const ItemCard = (item) => {
     const { item: data } = item
-    const isManaged = false
+    const dispatch = useDispatch()
+    const isManaged = useSelector(state => state.app.manageMode)
     const getCardHeight = () => {
-        // const { isManaged } = this.props
-        // return isManaged ? 125 : 75
-        return 75
+        return isManaged ? 125 : 75
     }
 
     const setAvatar = () => {
@@ -35,9 +36,17 @@ export const ItemCard = (item) => {
         }
     }
 
-    return (
-        // const { item, isManaged, editClicked, deleteClicked } = this.props
+    const editItemClicked = (item) => {
+        dispatch(openEdit(item))
+    }
 
+    const deleteItemClicked = (itemId) => {
+        console.log(`Deleting item Id: ${itemId}`)
+        // TODO: dispatch(deleteItem(itemId))
+    }
+
+
+    return (
         <Card variant="outlined" sx={{ width: 275, height: getCardHeight() }}>
             <CardActionArea
                 target="_blank"
@@ -51,10 +60,10 @@ export const ItemCard = (item) => {
                 />
             </CardActionArea>
             {isManaged ? <CardActions disableSpacing >
-                <IconButton aria-label="edit" onClick={() => editClicked(data)}>
+                <IconButton aria-label="edit" onClick={() => editItemClicked(data)}>
                     <Edit />
                 </IconButton>
-                <IconButton aria-label="delete" onClick={() => deleteClicked(data._id)}>
+                <IconButton aria-label="delete" onClick={() => deleteItemClicked(data._id)}>
                     <Delete />
                 </IconButton>
             </CardActions>
