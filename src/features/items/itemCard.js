@@ -9,12 +9,14 @@ import {
 } from "@mui/material";
 
 import { Delete, Edit, Label } from '@mui/icons-material';
-import { useDispatch, useSelector } from "react-redux";
-import { openEdit } from "../dialog/dialogSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { openEdit } from '../dialog/dialogSlice';
+import { useDeleteItemMutation } from '../api/apiSlice'
 
 export const ItemCard = (item) => {
     const { item: data } = item
     const dispatch = useDispatch()
+    const [deleteItem, { error }] = useDeleteItemMutation()
     const isManaged = useSelector(state => state.app.manageMode)
     const getCardHeight = () => {
         return isManaged ? 125 : 75
@@ -40,9 +42,8 @@ export const ItemCard = (item) => {
         dispatch(openEdit(item))
     }
 
-    const deleteItemClicked = (itemId) => {
-        console.log(`Deleting item Id: ${itemId}`)
-        // TODO: dispatch(deleteItem(itemId))
+    const deleteItemClicked = async (itemId) => {
+        await deleteItem(itemId)
     }
 
 

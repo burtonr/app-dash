@@ -67,7 +67,6 @@ export const EditDialog = () => {
         if (title && url) {
             await updateItem({ itemId: editItem._id, updatedItem }).unwrap()
                 .then(res => {
-                    // TODO: Handle response
                     clearAndClose()
                 })
                 .catch(err => {
