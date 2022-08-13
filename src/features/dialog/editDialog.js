@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import {
+    Alert,
     Button,
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
+    LinearProgress,
     TextField,
 } from '@mui/material';
 import { useUpdateItemMutation } from "../api/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { closeEdit } from './dialogSlice'
+import { addError } from '../notifications/notificationsSlice';
 
 const styles = {
     dialog: {
@@ -31,11 +34,12 @@ const styles = {
 export const EditDialog = () => {
     const isOpen = useSelector(state => state.dialogs.editOpen)
     const editItem = useSelector(state => state.dialogs.editItem)
+    const { hasError, errorMessage } = useSelector(state => state.notifications)
 
-    const [updateItem, { isLoading, error }] = useUpdateItemMutation()
+    const [updateItem] = useUpdateItemMutation()
     const dispatch = useDispatch()
 
-    const [errorMessage, setErrorMessage] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [url, setUrl] = useState('')
@@ -65,13 +69,15 @@ export const EditDialog = () => {
             image: editItem.image
         }
         if (title && url) {
+            setIsLoading(true)
             await updateItem({ itemId: editItem._id, updatedItem }).unwrap()
                 .then(res => {
                     clearAndClose()
                 })
                 .catch(err => {
-                    setErrorMessage(error?.data?.message ?? err?.data?.message)
+                    dispatch(addError(err))
                 })
+                .finally(() => setIsLoading(false))
         }
     }
 
@@ -126,8 +132,9 @@ export const EditDialog = () => {
                         value={imageUrl || ''}
                         onChange={onImageUrlChanged}
                     />
+                    {isLoading && <LinearProgress />}
+                    {hasError && <Alert severity="error">{errorMessage}</Alert>}
                 </DialogContent>
-                {errorMessage && <DialogContentText style={styles.errorMessage}><span>{errorMessage}</span></DialogContentText>}
                 <DialogActions>
                     <Button onClick={clearAndClose}>Cancel</Button>
                     <Button type="submit" form="edit-form">Submit</Button>

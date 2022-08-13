@@ -18,6 +18,15 @@ app.use('/api/dash/auth', routes.authRoutes)
 app.use('/api/dash/admin', routes.adminRoutes)
 app.use('/api/dash', routes.dashRoutes)
 
+// Unknown route handler
+app.use(function (req, res, next) {
+    return res.status(404).send({ message: 'Route: "' + req.url + '" not found. Contact the administrator' });
+});
+
+app.use(function (err, req, res, next) {
+    return res.status(500).send({ message: 'Unknown server error occurred.', error: err });
+});
+
 app.listen(port, () => {
     dbo.connect(async function (err) {
         if (err)

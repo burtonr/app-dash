@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import {
+    Alert,
     Button,
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
+    LinearProgress,
     TextField,
 } from '@mui/material';
 import { useAddItemMutation } from "../api/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCreate } from './dialogSlice'
+import { addError } from '../notifications/notificationsSlice';
 
 const styles = {
     dialog: {
@@ -25,10 +28,11 @@ const styles = {
 
 export const CreateDialog = () => {
     const isOpen = useSelector(state => state.dialogs.createOpen)
-    const [addItem, { isLoading, isSuccess, isError, error }] = useAddItemMutation()
+    const [addItem] = useAddItemMutation()
     const dispatch = useDispatch()
-    const [errorMessage, setErrorMessage] = useState('')
+    const { hasError, errorMessage } = useSelector(state => state.notifications)
 
+    const [isLoading, setIsLoading] = useState(false)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [url, setUrl] = useState('')
@@ -52,13 +56,15 @@ export const CreateDialog = () => {
         // causing a fetch NetworkError that is not otherwise caught by RTK Query
         e.preventDefault();
         if (title && url) {
+            setIsLoading(true)
             await addItem({ title, description, url, imageUrl }).unwrap()
                 .then(res => {
                     clearAndClose()
                 })
                 .catch(err => {
-                    setErrorMessage(error?.data?.message ?? err?.data?.message)
+                    dispatch(addError(err))
                 })
+                .finally(() => setIsLoading(false))
         }
     }
 
@@ -105,9 +111,8 @@ export const CreateDialog = () => {
                         defaultValue={imageUrl}
                         onChange={onImageUrlChanged}
                     />
-                    {/* TODO: Add loading progress */}
-                    {/* TODO: Make this pretty && prevent close*/}
-                    {errorMessage && <div>Error: `${JSON.stringify(errorMessage)}`</div>}
+                    {isLoading && <LinearProgress />}
+                    {hasError && <Alert severity="error">{errorMessage}</Alert>}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={clearAndClose}>Cancel</Button>

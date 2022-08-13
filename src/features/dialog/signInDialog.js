@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import {
+    Alert,
     Button,
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogContentText,
     DialogActions,
+    LinearProgress,
     TextField
 } from '@mui/material'
 import { useDispatch, useSelector } from "react-redux";
 import { useSignInMutation } from '../api/apiSlice'
 import { closeSignIn } from './dialogSlice'
+import { addError } from '../notifications/notificationsSlice';
 
 const styles = {
     inputField: {
@@ -26,10 +28,12 @@ const styles = {
 export const SignInDialog = () => {
     const dispatch = useDispatch()
     const isOpen = useSelector(state => state.dialogs.signInOpen)
-    const [signIn, { error }] = useSignInMutation()
+    const { hasError, errorMessage } = useSelector(state => state.notifications)
+    const [signIn] = useSignInMutation()
+
+    const [isLoading, setIsLoading] = useState(false)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
 
     const onUsernameChanged = (e) => setUsername(e.target.value)
     const onPasswordChanged = (e) => setPassword(e.target.value)
@@ -46,14 +50,15 @@ export const SignInDialog = () => {
         // causing a fetch NetworkError that is not otherwise caught by RTK Query
         e.preventDefault();
         if (username && password) {
+            setIsLoading(true)
             await signIn({ username, password }).unwrap()
                 .then(res => {
-                    // TODO: Handle response
                     clearAndClose()
                 })
                 .catch(err => {
-                    setErrorMessage(error?.data?.message ?? err?.data?.message)
+                    dispatch(addError(err))
                 })
+                .finally(() => setIsLoading(false))
         }
     }
 
@@ -79,8 +84,9 @@ export const SignInDialog = () => {
                         onChange={onPasswordChanged}
                         style={styles.inputField}
                     />
+                    {isLoading && <LinearProgress />}
+                    {hasError && <Alert severity="error">{errorMessage}</Alert>}
                 </DialogContent>
-                {errorMessage && <DialogContentText style={styles.errorMessage}><span>{errorMessage}</span></DialogContentText>}
                 <DialogActions>
                     <Button type="submit" form="login-form">Login</Button>
                 </DialogActions>
