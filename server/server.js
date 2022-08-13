@@ -1,3 +1,4 @@
+const process = require('process')
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
@@ -24,4 +25,15 @@ app.listen(port, () => {
         await dbo.initialize()
     })
     console.info(`Listening on port: ${port}`)
+})
+
+// SIGINT and SIGTERM handlers to cooperate when running in a container environment
+process.on('SIGINT', () => {
+    console.info("Server Interrupted")
+    process.exit(0)
+})
+
+process.on('SIGTERM', () => {
+    console.info("Server Terminated")
+    process.exit(0)
 })

@@ -2,13 +2,22 @@ version: '3'
 services:
   mongo:
     image: mongo:5.0
+    container_name: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: secretPassword
     ports:
       - 27017:27017
-networks:
-  backend:
-  frontend:
+  app:
+    build: ./
+    container_name: app-dash
+    restart: always
+    env_file:
+      - .env
+    environment:
+      PORT: 3000
+      MONGO_URI: 'mongodb://mongo:secretPassword@mongo'
+    ports:
+      - 3000:3000
 

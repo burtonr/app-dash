@@ -1,38 +1,40 @@
-# FROM node:16-alpine as build
-# WORKDIR /app
+FROM node:16-alpine as build
+WORKDIR /app
 
-# COPY package*.json ./
-# COPY public/ ./public/
+# NPM package.json and package.lock.json
+COPY package*.json ./
 
-# RUN npm ci --silent
-# RUN npm install react-scripts@4.0.3 -g --silent
+# babel.config.json and webpack.config.json
+COPY *.config.* ./
 
-# COPY src/ ./src/
+RUN npm ci --silent
 
-# RUN npm run build
+# React source code
+COPY src/ ./src/
 
-# FROM nginx:stable-alpine
-# RUN apk add --no-cache jq
+# index.html and favicon.ico
+COPY public/ ./public/
 
-# COPY --from=build /app/build /usr/share/nginx/html
-# EXPOSE 80
+RUN npm run build
 
-# COPY docker-entrypoint.sh /
-# ENTRYPOINT ["/docker-entrypoint.sh"]
-# CMD ["nginx", "-g", "daemon off;"]
+# Runtime image/layer
+FROM node:16-alpine as server
+WORKDIR /app-dash
 
-# FROM node:16-alpine
-# WORKDIR /server
+# Set production environment to prevent devDependencies being installed
+ENV NODE_ENV=production
 
-# ENV NODE_ENV=docker
+# Compiled React code
+COPY --from=build /app/public ./public
 
-# RUN chown node:node /server
-# USER node
+# NPM package.json and package.lock.json
+COPY package*.json ./
 
-# COPY --chown=node:node src/package*.json ./
+# Node API source code.
+# Nested directory to match with the `express.static` path in server.js
+COPY server/ ./server
 
-# RUN npm install
+RUN npm ci --silent
 
-# COPY --chown=node:node src/ ./
-
-# CMD ["node", "server.js"]
+# Run the API
+CMD ["node", "server/server.js"]
