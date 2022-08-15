@@ -12,7 +12,7 @@ import {
 import { useUpdateItemMutation } from "../api/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { closeEdit } from './dialogSlice'
-import { addError } from '../notifications/notificationsSlice';
+import { addError, addSuccess } from '../notifications/notificationsSlice';
 
 const styles = {
     dialog: {
@@ -72,6 +72,7 @@ export const EditDialog = () => {
             setIsLoading(true)
             await updateItem({ itemId: editItem._id, updatedItem }).unwrap()
                 .then(res => {
+                    dispatch(addSuccess(`Updated ${updatedItem.title}`))
                     clearAndClose()
                 })
                 .catch(err => {

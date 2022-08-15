@@ -12,6 +12,7 @@ import { Delete, Edit, Label } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { openEdit } from '../dialog/dialogSlice';
 import { useDeleteItemMutation } from '../api/apiSlice'
+import { addSuccess } from "../notifications/notificationsSlice";
 
 export const ItemCard = (item) => {
     const { item: data } = item
@@ -42,8 +43,9 @@ export const ItemCard = (item) => {
         dispatch(openEdit(item))
     }
 
-    const deleteItemClicked = async (itemId) => {
-        await deleteItem(itemId)
+    const deleteItemClicked = async (item) => {
+        await deleteItem(item._id)
+        dispatch(addSuccess(`Deleted ${item.title}`))
     }
 
 
@@ -64,7 +66,7 @@ export const ItemCard = (item) => {
                 <IconButton aria-label="edit" onClick={() => editItemClicked(data)}>
                     <Edit />
                 </IconButton>
-                <IconButton aria-label="delete" onClick={() => deleteItemClicked(data._id)}>
+                <IconButton aria-label="delete" onClick={() => deleteItemClicked(data)}>
                     <Delete />
                 </IconButton>
             </CardActions>

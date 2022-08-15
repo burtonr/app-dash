@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useSignInMutation } from '../api/apiSlice'
 import { closeSignIn } from './dialogSlice'
-import { addError } from '../notifications/notificationsSlice';
+import { addError, addSuccess } from '../notifications/notificationsSlice';
 
 const styles = {
     inputField: {
@@ -53,6 +53,7 @@ export const SignInDialog = () => {
             setIsLoading(true)
             await signIn({ username, password }).unwrap()
                 .then(res => {
+                    dispatch(addSuccess(`Signed in as ${username}`))
                     clearAndClose()
                 })
                 .catch(err => {
@@ -64,8 +65,8 @@ export const SignInDialog = () => {
 
     return (
         <Dialog open={isOpen} onClose={clearAndClose} sx={{ minWidth: 150 }}>
-            <DialogTitle>Login to App-Dash</DialogTitle>
-            <form id="login-form" onSubmit={onSignInClicked}>
+            <DialogTitle>Sign in to App-Dash</DialogTitle>
+            <form id="signin-form" onSubmit={onSignInClicked}>
                 <DialogContent>
                     <TextField
                         fullWidth
@@ -88,7 +89,7 @@ export const SignInDialog = () => {
                     {hasError && <Alert severity="error">{errorMessage}</Alert>}
                 </DialogContent>
                 <DialogActions>
-                    <Button type="submit" form="login-form">Login</Button>
+                    <Button type="submit" form="signin-form">Sign In</Button>
                 </DialogActions>
             </form>
         </Dialog>

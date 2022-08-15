@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Alert, Snackbar } from '@mui/material'
 import { Navbar } from './app/navbar'
 import { ItemGrid } from './features/items/itemGrid'
@@ -6,9 +7,10 @@ import { CreateDialog } from './features/dialog/createDialog'
 import { SignInDialog } from './features/dialog/signInDialog'
 import { usePrefetch } from './features/api/apiSlice'
 import { EditDialog } from './features/dialog/editDialog'
-import { useSelector } from 'react-redux'
+import { clearNotifications } from './features/notifications/notificationsSlice'
 
 const App = () => {
+    const dispatch = useDispatch()
     const prefetchSettings = usePrefetch('getSettings')
     const { hasError, errorMessage, hasSuccess, successMessage } = useSelector(state => state.notifications)
 
@@ -20,25 +22,22 @@ const App = () => {
         prefetchSettings()
     }, [])
 
-    // Extra work here to keep the notification after the dialog is closed
     useEffect(() => {
         const hasNotification = hasError || hasSuccess
-        if (openSnack && !hasNotification) {
-            setTimeout(() => {
-                setOpenSnack(false)
-                setSnackMessage('')
-            }, 5000)
-        } else {
-            const msg = errorMessage ?? successMessage
-            setOpenSnack(hasError || hasSuccess)
-            setSnackMessage(msg)
-            setSnackSev(snackSeverity())
-        }
-    }, [hasError])
+        const msg = errorMessage ? errorMessage : successMessage
+        const sev = snackSeverity()
+        setOpenSnack(hasNotification)
+        setSnackMessage(msg)
+        setSnackSev(sev)
+    }, [hasError, hasSuccess])
 
     const snackSeverity = () => {
         if (hasError) return 'error'
         if (hasSuccess) return 'success'
+    }
+
+    const closeAndClear = () => {
+        dispatch(clearNotifications())
     }
 
     return (
@@ -49,6 +48,7 @@ const App = () => {
             <EditDialog />
             <Snackbar open={openSnack}
                 autoHideDuration={5000}
+                onClose={closeAndClear}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
                 <Alert severity={snackSev}>

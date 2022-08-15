@@ -12,7 +12,7 @@ import {
 import { useAddItemMutation } from "../api/apiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCreate } from './dialogSlice'
-import { addError } from '../notifications/notificationsSlice';
+import { addError, addSuccess } from '../notifications/notificationsSlice';
 
 const styles = {
     dialog: {
@@ -59,6 +59,7 @@ export const CreateDialog = () => {
             setIsLoading(true)
             await addItem({ title, description, url, imageUrl }).unwrap()
                 .then(res => {
+                    dispatch(addSuccess(`Added ${title}`))
                     clearAndClose()
                 })
                 .catch(err => {

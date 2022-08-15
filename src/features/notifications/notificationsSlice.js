@@ -34,18 +34,16 @@ const notificationsSlice = createSlice({
         removeSuccess: (state) => {
             state.hasSuccess = false
             state.successMessage = ''
+        },
+        clearNotifications: (state) => {
+            state.hasError = false
+            state.errorMessage = ''
+            state.hasSuccess = false
+            state.successMessage = ''
         }
     },
-    extraReducers: builder => {
-        builder.addMatcher(
-            (action) => action.type.startsWith('dialogs/close'),
-            (state) => {
-                state.hasError = false
-                state.errorMessage = ''
-            })
-    }
 })
 
-export const { addError, removeError, addSuccess, removeSuccess } = notificationsSlice.actions
+export const { addError, removeError, addSuccess, removeSuccess, clearNotifications } = notificationsSlice.actions
 
 export default notificationsSlice.reducer
