@@ -11,12 +11,12 @@ module.exports = {
             } else {
                 let imgBuf = Buffer.from(imgRes.data, 'binary')
                 return sharp(imgBuf)
-                        .resize(40, 40)
-                        .toBuffer({ resolveWithObject: true });
+                    .resize(40, 40)
+                    .toBuffer({ resolveWithObject: true });
             }
         } catch (err) {
-            console.error('Failed to retrieve image');
-            console.error(err);
+            console.error(`Failed to retrieve image: ${err}`);
+            throw new Error('Unable to download image from supplied URL')
         }
     }
 }

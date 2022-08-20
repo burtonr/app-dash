@@ -4,18 +4,9 @@ const dbo = require('../db/conn')
 const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
 const apiKey = process.env.API_KEY
-const disableAuth = process.env.DISABLE_AUTH
-
-router.get('/init', async (req, res) => {
-    const status = {
-        authDisabled: disableAuth,
-        adminOnly: false, // TODO: Future use
-    }
-    res.send(status)
-
-})
 
 router.post('/signin', async (req, res) => {
+    // TODO: Add check for "authDisabled" to skip signin
     const db = dbo.getDb()
     let foundUser = await db.collection('users').findOne({ username: req.body.username })
     if (foundUser) {
@@ -30,10 +21,12 @@ router.post('/signin', async (req, res) => {
                 accessToken: token
             })
             return
+        } else {
+            res.status(401).send({ message: "Username or password is not valid" })
         }
+    } else {
+        res.status(400).send({ message: "Username does not exist" })
     }
-
-    res.status(401).send({ message: "Username or password is not valid" })
 })
 
 // TODO: Add password reset route

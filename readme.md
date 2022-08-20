@@ -34,17 +34,23 @@ The dashboard can be made to allow anonymous users so it can be used as a defaul
 
 Copy the `.env.sample` with the new name: `.env`
 
+```bash
+cp ./.env.sample ./.env
+```
+
 Adjust the values of the variables to work with your specific setup
 
 - Settings:
   - `PORT`
     - This is the port number that the app will listen on
+    - Default: `3000`
   - `MONGO_URI`
     - This is the full MongoDB connection string. The sample is pre-filled with the value for the included Docker Compose instance
   - `API_KEY`
     - This is the key used to sign the app's JWT token for verifying user access
   - `DISABLE_AUTH`
     - This will allow any user to access and modify the app data. Value must be _exactly_ `true`
+    - Default: `'false'`
 
 ### All Inclusive with Compose
 
@@ -54,13 +60,13 @@ To start and run the full App Dash with server and database, simply run the `doc
 docker-compose up
 ```
 
-This will build the containers from source if the images do not already exist. The MongoDB database container does not include a mounted volume, so all the data will be deleted when the container is removed. If you wish to keep your data, add the following line to the `docker-compose.yml` file:
+This will build the containers from source if the images do not already exist. The MongoDB database container does not include a mounted volume, so all the data will be deleted when the container is removed. If you wish to keep your data, add a `volumes:` section to the `docker-compose.yml` file as shown:
 
 ```yaml
 mongo:
   image: mongo:5.0
   restart: always
-  # Add volumes section
+  # > Add volumes section
   volumes:
     - ./data:/data/db
   # Remaining existing file below
@@ -82,5 +88,6 @@ mongo:
 - Client specific
   - [React](https://reactjs.org/)
   - [React-Router-Dom](https://reactrouter.com/web/guides/quick-start)
+  - [Redux Toolkit](https://redux-toolkit.js.org/)
+    - [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
   - [Material UI](https://mui.com/)
-  - [Axios](https://axios-http.com/)
