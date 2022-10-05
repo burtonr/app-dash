@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { blue, grey, deepPurple, purple } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 
 import { Navbar } from './app/navbar'
 import { ItemGrid } from './features/items/itemGrid'
@@ -9,6 +10,9 @@ import { SignInDialog } from './features/dialog/signInDialog'
 import { usePrefetch } from './features/api/apiSlice'
 import { EditDialog } from './features/dialog/editDialog'
 import { Notification } from './features/notifications/notification'
+
+
+// TODO: https://mui.com/material-ui/customization/dark-mode/#dark-mode-with-a-custom-palette
 
 const App = () => {
     const prefetchSettings = usePrefetch('getSettings')
@@ -33,11 +37,15 @@ const App = () => {
                         }
                     }
                     : {
+                        background: {
+                            default: '#161b22',// '#0d1117',
+                            paper: '#161b22' //#484f58'
+                        },
                         primary: {
                             main: grey[800]
                         },
                         secondary: {
-                            main: deepPurple[800]
+                            main: deepPurple[300]
                         }
                     })
             }
@@ -50,6 +58,7 @@ const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline />
             <div>
                 <Navbar />
                 <SignInDialog />
