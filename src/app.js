@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { blue, grey, deepPurple, purple } from '@mui/material/colors';
+import React, { useEffect, useMemo } from 'react'
+import { useSelector } from 'react-redux';
+import { blue, grey, deepPurple } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
@@ -11,19 +12,17 @@ import { usePrefetch } from './features/api/apiSlice'
 import { EditDialog } from './features/dialog/editDialog'
 import { Notification } from './features/notifications/notification'
 
-
-// TODO: https://mui.com/material-ui/customization/dark-mode/#dark-mode-with-a-custom-palette
-
 const App = () => {
     const prefetchSettings = usePrefetch('getSettings')
-    const [mode, setMode] = useState('dark')
+    const isDarkMode = useSelector(state => state.app.darkMode)
 
     useEffect(() => {
         prefetchSettings()
     }, [])
 
     // TODO: Future -> Store theme in DB and get with getSettings call. Also, adjustable via admin
-    const getTheme = mode => {
+    const getTheme = () => {
+        const mode = isDarkMode ? 'dark' : 'light'
         return ({
             palette: {
                 mode,
@@ -37,9 +36,10 @@ const App = () => {
                         }
                     }
                     : {
+                        // DEV: 'Borrowed' from Github dark mode
                         background: {
-                            default: '#161b22',// '#0d1117',
-                            paper: '#161b22' //#484f58'
+                            default: '#161b22',
+                            paper: '#161b22'
                         },
                         primary: {
                             main: grey[800]
@@ -52,9 +52,8 @@ const App = () => {
         })
     }
 
-    // TODO: Button to exec setMode()
     // TODO: Store mode in local storage per user
-    const theme = useMemo(() => createTheme(getTheme(mode)), [mode]);
+    const theme = useMemo(() => createTheme(getTheme()), [isDarkMode]);
 
     return (
         <ThemeProvider theme={theme}>

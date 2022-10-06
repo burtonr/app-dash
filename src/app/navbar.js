@@ -13,10 +13,12 @@ import {
     Logout,
     MenuOpen,
     Menu,
-    PlaylistAdd
+    PlaylistAdd,
+    DarkMode,
+    LightMode
 } from '@mui/icons-material'
 import { useDispatch, useSelector } from "react-redux";
-import { toggleManageMode } from "../features/app/appSlice";
+import { toggleDarkMode, toggleManageMode } from "../features/app/appSlice";
 import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
 import { signOut } from "../features/user/userSlice";
 
@@ -33,6 +35,10 @@ export const Navbar = () => {
         return currentUser && (currentUser.role == 'admin' || currentUser.role == 'editor')
     }
 
+    const isDarkMode = () => {
+        return appSettings.darkMode
+    }
+
     const manageClicked = () => {
         dispatch(toggleManageMode())
     }
@@ -47,6 +53,10 @@ export const Navbar = () => {
 
     const signOutClicked = () => {
         dispatch(signOut())
+    }
+
+    const modeSelectClicked = () => {
+        dispatch(toggleDarkMode())
     }
 
     const signInOutButton = () => {
@@ -85,6 +95,14 @@ export const Navbar = () => {
                         </Tooltip>
                     }
                     {signInOutButton()}
+                    {isDarkMode() ?
+                        <Tooltip title="Light Mode">
+                            <Button color="inherit" onClick={modeSelectClicked}><LightMode fontSize='small' /></Button>
+                        </Tooltip>
+                        : <Tooltip title="Dark Mode">
+                            <Button color="inherit" onClick={modeSelectClicked}><DarkMode fontSize='small' /></Button>
+                        </Tooltip>
+                    }
                 </Toolbar>
             </AppBar>
         </Box>
