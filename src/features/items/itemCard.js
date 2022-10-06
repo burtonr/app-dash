@@ -63,10 +63,10 @@ export const ItemCard = (item) => {
                 />
             </CardActionArea>
             {isManaged ? <CardActions disableSpacing >
-                <IconButton aria-label="edit" onClick={() => editItemClicked(data)}>
+                <IconButton color={'secondary'} aria-label="edit" onClick={() => editItemClicked(data)}>
                     <Edit />
                 </IconButton>
-                <IconButton aria-label="delete" onClick={() => deleteItemClicked(data)}>
+                <IconButton color={'error'} aria-label="delete" onClick={() => deleteItemClicked(data)}>
                     <Delete />
                 </IconButton>
             </CardActions>

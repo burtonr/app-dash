@@ -5,11 +5,15 @@ const appSlice = createSlice({
     name: 'app',
     initialState: {
         authDisabled: false,
-        manageMode: false
+        manageMode: false,
+        darkMode: false
     },
     reducers: {
         toggleManageMode: (state) => {
             state.manageMode = !state.manageMode
+        },
+        toggleDarkMode: (state) => {
+            state.darkMode = !state.darkMode
         }
     },
     extraReducers(builder) {
@@ -19,6 +23,6 @@ const appSlice = createSlice({
     }
 })
 
-export const { toggleManageMode } = appSlice.actions
+export const { toggleManageMode, toggleDarkMode } = appSlice.actions
 
 export default appSlice.reducer
