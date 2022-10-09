@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
     AppBar,
     Box,
     Button,
+    ListItemIcon,
+    Menu,
+    MenuItem,
     Toolbar,
     Tooltip,
     Typography,
@@ -11,11 +14,13 @@ import {
 import {
     Login,
     Logout,
-    MenuOpen,
-    Menu,
+    Menu as MenuIcon,
     PlaylistAdd,
     DarkMode,
-    LightMode
+    LightMode,
+    Settings,
+    ViewModule,
+    AppRegistration
 } from '@mui/icons-material'
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode, toggleManageMode } from "../features/app/appSlice";
@@ -23,6 +28,9 @@ import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
 import { signOut } from "../features/user/userSlice";
 
 export const Navbar = () => {
+    const [anchorEl, setAnchorEl] = useState(null)
+    const open = Boolean(anchorEl);
+
     const appSettings = useSelector(state => state.app)
     const currentUser = useSelector(state => state.user)
 
@@ -47,30 +55,78 @@ export const Navbar = () => {
         dispatch(openCreate())
     }
 
-    const signInClicked = () => {
-        dispatch(openSignIn())
-    }
+    const signInOutClicked = () => {
+        if (currentUser.username)
+            dispatch(signOut())
 
-    const signOutClicked = () => {
-        dispatch(signOut())
+        dispatch(openSignIn())
     }
 
     const modeSelectClicked = () => {
         dispatch(toggleDarkMode())
     }
 
-    const signInOutButton = () => {
+    const menuClicked = (e) => {
+        setAnchorEl(e.currentTarget)
+    }
+
+    const closeMenu = () => {
+        setAnchorEl(null)
+    }
+
+    const createMenuItem = ({ clickHandler, itemIcon, itemText }) => {
+        return (
+            <MenuItem onClick={clickHandler}>
+                <ListItemIcon>
+                    {itemIcon}
+                </ListItemIcon>
+                {itemText}
+            </MenuItem>
+        )
+    }
+
+    const addItem = () => {
+        return createMenuItem({
+            clickHandler: addClicked,
+            itemIcon: <PlaylistAdd fontSize="small" />,
+            itemText: 'Add Item'
+        })
+    }
+
+    const manageItem = () => {
+        const itemIcon = appSettings.manageMode ? <ViewModule fontSize='small' /> : <AppRegistration fontSize='small' />
+        const itemText = appSettings.manageMode ? "View Only" : "Manage"
+
+        return createMenuItem({
+            clickHandler: manageClicked,
+            itemIcon,
+            itemText
+        })
+    }
+
+    const modeSelectItem = () => {
+        const itemIcon = isDarkMode() ? <LightMode fontSize='small' /> : <DarkMode fontSize='small' />
+        const itemText = isDarkMode() ? "Light Mode" : "Dark Mode"
+
+        return createMenuItem({
+            clickHandler: modeSelectClicked,
+            itemIcon,
+            itemText
+        })
+    }
+
+    const signInOutItem = () => {
         if (appSettings.authDisabled)
             return
 
-        if (currentUser.username)
-            return (<Tooltip title="Sign Out">
-                <Button color="inherit" onClick={signOutClicked}><Logout /></Button>
-            </Tooltip>)
-        else
-            return (<Tooltip title="Sign In">
-                <Button color="inherit" onClick={signInClicked}><Login /></Button>
-            </Tooltip>)
+        const itemIcon = currentUser.username ? <Logout fontSize="small" /> : <Login fontSize="small" />
+        const itemText = currentUser.username ? "Sign Out" : "Sign In"
+
+        return createMenuItem({
+            clickHandler: signInOutClicked,
+            itemIcon,
+            itemText
+        })
     }
 
     return (
@@ -80,29 +136,23 @@ export const Navbar = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Button color="inherit" component={NavLink} to="/">App Dash</Button>
                     </Typography>
-                    {isEditor() &&
-                        (appSettings.manageMode ?
-                            <Tooltip title="View">
-                                <Button color="inherit" onClick={manageClicked}><Menu /></Button>
-                            </Tooltip> :
-                            <Tooltip title="Manage">
-                                <Button color="inherit" onClick={manageClicked}><MenuOpen /></Button>
-                            </Tooltip>)
-                    }
-                    {isEditor() &&
-                        <Tooltip title="Add Item">
-                            <Button color="inherit" onClick={addClicked}><PlaylistAdd /></Button>
-                        </Tooltip>
-                    }
-                    {signInOutButton()}
-                    {isDarkMode() ?
-                        <Tooltip title="Light Mode">
-                            <Button color="inherit" onClick={modeSelectClicked}><LightMode fontSize='small' /></Button>
-                        </Tooltip>
-                        : <Tooltip title="Dark Mode">
-                            <Button color="inherit" onClick={modeSelectClicked}><DarkMode fontSize='small' /></Button>
-                        </Tooltip>
-                    }
+                    <Tooltip title="Menu">
+                        <Button color="inherit" onClick={menuClicked}><MenuIcon /></Button>
+                    </Tooltip>
+                    <Menu
+                        anchorEl={anchorEl}
+                        id="app-dash-menu"
+                        open={open}
+                        onClose={closeMenu}
+                        onClick={closeMenu}
+                        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+                    >
+                        {isEditor() && addItem()}
+                        {isEditor() && manageItem()}
+                        {modeSelectItem()}
+                        {signInOutItem()}
+                    </Menu>
                 </Toolbar>
             </AppBar>
         </Box>
