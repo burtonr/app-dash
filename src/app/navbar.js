@@ -59,7 +59,6 @@ export const Navbar = () => {
         if (currentUser.username)
             dispatch(signOut())
 
-
         dispatch(openSignIn())
     }
 
@@ -75,6 +74,47 @@ export const Navbar = () => {
         setAnchorEl(null)
     }
 
+    const createMenuItem = ({ clickHandler, itemIcon, itemText }) => {
+        return (
+            <MenuItem onClick={clickHandler}>
+                <ListItemIcon>
+                    {itemIcon}
+                </ListItemIcon>
+                {itemText}
+            </MenuItem>
+        )
+    }
+
+    const addItem = () => {
+        return createMenuItem({
+            clickHandler: addClicked,
+            itemIcon: <PlaylistAdd fontSize="small" />,
+            itemText: 'Add Item'
+        })
+    }
+
+    const manageItem = () => {
+        const itemIcon = appSettings.manageMode ? <ViewModule fontSize='small' /> : <AppRegistration fontSize='small' />
+        const itemText = appSettings.manageMode ? "View Only" : "Manage"
+
+        return createMenuItem({
+            clickHandler: manageClicked,
+            itemIcon,
+            itemText
+        })
+    }
+
+    const modeSelectItem = () => {
+        const itemIcon = isDarkMode() ? <LightMode fontSize='small' /> : <DarkMode fontSize='small' />
+        const itemText = isDarkMode() ? "Light Mode" : "Dark Mode"
+
+        return createMenuItem({
+            clickHandler: modeSelectClicked,
+            itemIcon,
+            itemText
+        })
+    }
+
     const signInOutItem = () => {
         if (appSettings.authDisabled)
             return
@@ -82,14 +122,11 @@ export const Navbar = () => {
         const itemIcon = currentUser.username ? <Logout fontSize="small" /> : <Login fontSize="small" />
         const itemText = currentUser.username ? "Sign Out" : "Sign In"
 
-        return (
-            <MenuItem onClick={signInOutClicked}>
-                <ListItemIcon>
-                    {itemIcon}
-                </ListItemIcon>
-                {itemText}
-            </MenuItem>
-        )
+        return createMenuItem({
+            clickHandler: signInOutClicked,
+            itemIcon,
+            itemText
+        })
     }
 
     return (
@@ -111,34 +148,9 @@ export const Navbar = () => {
                         transformOrigin={{ horizontal: 'left', vertical: 'top' }}
                         anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
                     >
-                        {isEditor() &&
-                            <MenuItem onClick={addClicked}>
-                                <ListItemIcon>
-                                    <PlaylistAdd fontSize="small" />
-                                </ListItemIcon>
-                                Add Item
-                            </MenuItem>
-                        }
-                        {isEditor() &&
-                            <MenuItem onClick={manageClicked}>
-                                <ListItemIcon>
-                                    {appSettings.manageMode ? <ViewModule fontSize='small' /> : <AppRegistration fontSize='small' />}
-                                </ListItemIcon>
-                                {appSettings.manageMode ? "View Only" : "Manage"}
-                            </MenuItem>
-                        }
-                        <MenuItem>
-                            <ListItemIcon>
-                                <Settings fontSize="small" />
-                            </ListItemIcon>
-                            Settings
-                        </MenuItem>
-                        <MenuItem onClick={modeSelectClicked}>
-                            <ListItemIcon>
-                                {isDarkMode() ? <LightMode fontSize='small' /> : <DarkMode fontSize='small' />}
-                            </ListItemIcon>
-                            {isDarkMode() ? "Light Mode" : "Dark Mode"}
-                        </MenuItem>
+                        {isEditor() && addItem()}
+                        {isEditor() && manageItem()}
+                        {modeSelectItem()}
                         {signInOutItem()}
                     </Menu>
                 </Toolbar>
