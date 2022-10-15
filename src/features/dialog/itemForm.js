@@ -19,13 +19,12 @@ const styles = {
 }
 
 export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) => {
-    // TODO: Update validation schema... This is just the example from Formik tutorial
     const validationSchema = Yup.object({
         title: Yup.string()
             .max(15, 'Must be 15 characters or less')
             .required('Required'),
         description: Yup.string()
-            .max(20, 'Must be 20 characters or less'),
+            .max(30, 'Must be 30 characters or less'),
         url: Yup.string().url('Must be a valid full URL').required('Required'),
         imageUrl: Yup.string().url('Must be a valid full URL'),
     })

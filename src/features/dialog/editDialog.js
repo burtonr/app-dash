@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-    Alert,
     Dialog,
     DialogTitle
 } from '@mui/material';
@@ -27,7 +26,6 @@ const styles = {
 export const EditDialog = () => {
     const isOpen = useSelector(state => state.dialogs.editOpen)
     const editItem = useSelector(state => state.dialogs.editItem)
-    // const { hasError, errorMessage } = useSelector(state => state.notifications)
 
     const [updateItem] = useUpdateItemMutation()
     const dispatch = useDispatch()
@@ -40,7 +38,7 @@ export const EditDialog = () => {
             ...values,
             image: editItem.image
         }
-        if (title && url) {
+        if (updatedItem.title && updatedItem.url) {
             setIsLoading(true)
             await updateItem({ itemId: editItem._id, updatedItem }).unwrap()
                 .then(res => {
@@ -69,8 +67,6 @@ export const EditDialog = () => {
                 onClose={clearAndClose}
                 isLoading={isLoading}
             />
-            {/* {hasError && <Alert severity="error">{errorMessage}</Alert>} */}
-
         </Dialog>
     );
 
