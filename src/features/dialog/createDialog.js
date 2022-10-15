@@ -11,9 +11,6 @@ import { addError, addSuccess } from '../notifications/notificationsSlice';
 import { ItemForm } from './itemForm';
 
 const styles = {
-    dialog: {
-
-    },
     spacedInput: {
         padding: '10px'
     },
