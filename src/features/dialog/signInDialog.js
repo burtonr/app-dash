@@ -35,8 +35,7 @@ export const SignInDialog = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const clearAndClose = () => {
-        setUsername('')
-        setPassword('')
+        formik.resetForm()
         dispatch(closeSignIn())
     }
 
@@ -47,6 +46,7 @@ export const SignInDialog = () => {
             .required('Required'),
         password: Yup.string()
             .max(20, 'Must be 20 characters or less')
+            .required('Required')
     })
 
     const formik = useFormik({
