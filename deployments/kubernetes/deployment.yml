@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-dash
+  namespace: home
+spec:
+  selector:
+    matchLabels:
+      app: app-dash
+  template:
+    metadata:
+      labels:
+        app: app-dash
+    spec:
+      containers:
+      - name: app-dash
+        image: burtonr/app-dash:0.1 # TODO: Update image with proper tag
+        envFrom:
+          - secretRef:
+              name: dashsecret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
