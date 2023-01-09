@@ -15,6 +15,7 @@ function verifyToken(req, res, next) {
             return
         }
 
+        // TODO: This crashes the server if the apiKey is undefined in the .env
         jwt.verify(token, apiKey, (err, decoded) => {
             if (err) {
                 res.status(401).send()

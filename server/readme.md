@@ -1,33 +1,44 @@
 # App-Dash Server
 This is the backend for the "App-Dash" project.
 
-The API includes a basic `GET` request to load the dashboard with all the stored apps
+The API includes the following routes:
+    - `/api/dash`
+    - `/api/dash/settings`
+    - `/api/dash/auth`
+    - `/api/dash/admin`
 
-There is also a `/admin` route that allows adding, editing, and removing apps.
+## Routes and Functionality
+
+- `/api/dash`
+    - `GET /`: Get all of the "apps" stored in the configured database.
+        - See below for the data structure
+    - `POST /`: Insert a new item
+        - This function will pull the image from the provided `imageUrl`, and resize it to optimize storage and page performance
+    - `PUT /{id}`: Update and existing item with the values provided.
+    - `DELETE /{id}`: Delete the item from the database
+- `/api/dash/settings`
+    - `GET /`: Get the application settings configured in the database
+        - `authDisabled`, etc...
+- `/api/dash/auth`
+    - `POST /signin`: Provide the username and encrypted password
+        - See below for the data structure returned
+- `/api/dash/admin`
+    - `POST /user`: Add a new user with role
+
+
+with a `GET` request to load the dashboard with all the stored apps, as well as `POST` to create, `PUT` to update, and `DELETE` to remove app items.
+
+There is also a `/admin` route that allows adding users.
 
 ## Run
-There are currently 2 options for running the server:
-
-- Directly
-    - This will use the included `config/default.json` settings
-    - To use different settings, create a new file and set the `NODE_ENV` environment variable to match that file name
-```bash
-cd src/
-
-npm start
-```
-
-- With Docker
-    - This will use a settings file `config/docker.json` that you will need to create
-        - `cp config/default.json config/docker.json`
-```bash
-docker build -t app-dash-server .
-
-docker run -p 8080:8080 app-dash-server
-```
+The server and UI are run together as the main application. Refer to the [main readme](../readme.md) for more information
 
 ## Data
 The data model of the `apps` collection is as follows:
+
+#### Item
+
+This is a sample data structure of an item that is returned, or POST-ed
 
 ```json
 {
@@ -45,10 +56,41 @@ The data model of the `apps` collection is as follows:
 }
 ```
 
-There is also a collection of `user`. This contains the salt-ed admin password for loggin in if it's configured.
+#### User
+
+This is a sample data structure of a user returned from the `/api/dash/auth/signin` endpoint
 
 ```json
 {
-    "password": "$2a$08$mmxdbJXQcg8w.Iqxb1en5.8pS3P8IXwXdNi06I.CLYS2yl6AJlqhi"
+    "id": "629f4f338815727d1fe29dda",
+    "username": "admin",
+    "role": "629ea6d6a08b87f9bcf16741",
+    "accessToken": "eyJhbGci0iJIUzI1NiIsInR5..."
+}
+```
+
+The `role` property is a MongoDB ObjectId from the `roles` collection. This is pre-populated with the following values:
+- admin
+- editor
+- user
+
+This is a sample data structure of a request to add a new user via the `api/dash/admin/user` endpoint
+
+```json
+{
+    "username": "Scuba Steve",
+    "role": "editor",
+    "password": "secret"
+}
+```
+
+#### Settings
+
+This is a sample data structure of the server settings returned from the `/api/dash/settings` endpoint
+
+```json
+{
+    "authDisabled": true,
+    "adminOnly": false
 }
 ```
