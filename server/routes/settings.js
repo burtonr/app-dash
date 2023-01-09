@@ -3,7 +3,7 @@ const router = express.Router()
 const mw = require('../middleware/auth')
 const dbo = require('../db/conn')
 
-const disableAuth = process.env.DISABLE_AUTH || false
+const disableAuth = process.env.DISABLE_AUTH === 'true'
 
 router.get('/', (req, res) => {
     const status = {
