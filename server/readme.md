@@ -63,8 +63,8 @@ This is a sample data structure of a user returned from the `/api/dash/auth/sign
 ```json
 {
     "id": "629f4f338815727d1fe29dda",
-    "username": "admin",
-    "role": "629ea6d6a08b87f9bcf16741",
+    "username": "administrator",
+    "role": "admin",
     "accessToken": "eyJhbGci0iJIUzI1NiIsInR5..."
 }
 ```
