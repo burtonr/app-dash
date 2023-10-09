@@ -47,15 +47,16 @@ export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) =>
         }
     })
 
-    const findExistingGroups = () => {
+    const existingGroups = React.useMemo(() => {
         var allGroups = []
-        for(var item of items) {
-            if (item.group)
-                allGroups.push(item.group)
+        for (var item of items) {
+            let groupName = item.group
+            if (groupName && allGroups.indexOf(groupName) == -1)
+                allGroups.push(groupName)
         }
 
         return allGroups
-    }
+    }, [items])
 
     return (
         <>
@@ -115,8 +116,8 @@ export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) =>
                         selectOnFocus
                         clearOnBlur
                         handleHomeEndKeys
-                        options={findExistingGroups()}
-                        renderInput={(params) => 
+                        options={existingGroups}
+                        renderInput={(params) =>
                             <TextField
                                 {...params}
                                 id="item-group"
