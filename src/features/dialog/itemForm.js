@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import {
+    Autocomplete,
     Button,
     DialogContent,
     DialogActions,
     LinearProgress,
     TextField,
 } from '@mui/material';
+import { usePrefetch } from "../api/apiSlice";
+import { useSelector } from 'react-redux';
 
 const styles = {
     spacedInput: {
@@ -19,6 +22,12 @@ const styles = {
 }
 
 export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) => {
+    const prefetchItems = usePrefetch('getItems')
+    useEffect(() => {
+        prefetchItems()
+    }, [])
+    const items = useSelector(state => state.items)
+
     const validationSchema = Yup.object({
         title: Yup.string()
             .max(15, 'Must be 15 characters or less')
@@ -27,6 +36,7 @@ export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) =>
             .max(30, 'Must be 30 characters or less'),
         url: Yup.string().url('Must be a valid full URL').required('Required'),
         imageUrl: Yup.string().url('Must be a valid full URL'),
+        group: Yup.string().max(15, 'Must be 15 characters or less').nullable(),
     })
 
     const formik = useFormik({
@@ -36,6 +46,16 @@ export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) =>
             onFormSubmit(values)
         }
     })
+
+    const findExistingGroups = () => {
+        var allGroups = []
+        for(var item of items) {
+            if (item.group)
+                allGroups.push(item.group)
+        }
+
+        return allGroups
+    }
 
     return (
         <>
@@ -87,6 +107,34 @@ export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) =>
                         value={formik.values.imageUrl}
                         error={formik.touched.imageUrl && Boolean(formik.errors.imageUrl)}
                         helperText={formik.touched.imageUrl && formik.errors.imageUrl}
+                    />
+
+                    <Autocomplete
+                        fullWidth
+                        freeSolo
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        options={findExistingGroups()}
+                        renderInput={(params) => 
+                            <TextField
+                                {...params}
+                                id="item-group"
+                                name="group"
+                                label="Group"
+                                style={styles.spacedInput}
+                                onChange={formik.handleChange}
+                                value={formik.values.group}
+                                error={formik.touched.group && Boolean(formik.errors.group)}
+                                helperText={formik.touched.group && formik.errors.group}
+                            />
+                        }
+                        onChange={(_, value) => {
+                            console.log(`Change value: ${value}`)
+                            formik.setFieldValue("group", value, true)
+                        }}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.group}
                     />
                     {isLoading && <LinearProgress />}
                 </DialogContent>

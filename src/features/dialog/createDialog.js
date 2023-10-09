@@ -32,13 +32,13 @@ export const CreateDialog = () => {
     }
 
     const onSaveClicked = async (values) => {
-        const { title, description, url, imageUrl } = values
+        const { title, description, url, imageUrl, group } = values
 
         // DEV: Use .unwrap() as the Form Dialog closes before the request completes
         // causing a fetch NetworkError that is not otherwise caught by RTK Query
         if (title && url) {
             setIsLoading(true)
-            await addItem({ title, description, url, imageUrl }).unwrap()
+            await addItem({ title, description, url, imageUrl, group }).unwrap()
                 .then(res => {
                     dispatch(addSuccess(`Added ${title}`))
                     clearAndClose()
@@ -54,7 +54,7 @@ export const CreateDialog = () => {
         <Dialog open={isOpen} onClose={clearAndClose} style={styles.dialog}>
             <DialogTitle>Add New Item</DialogTitle>
             <ItemForm
-                initialValues={{ title: '', description: '', url: '', imageUrl: '' }}
+                initialValues={{ title: '', description: '', url: '', imageUrl: '', group: '' }}
                 onFormSubmit={onSaveClicked}
                 onClose={clearAndClose}
                 isLoading={isLoading}
