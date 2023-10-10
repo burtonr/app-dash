@@ -34,6 +34,7 @@ router.post('/', [mw.verifyToken, mw.isEditor], async (req, res, next) => {
         url: req.body.url,
         imageUrl: req.body.imageUrl,
         image: smImg,
+        group: req.body.group
     };
     try {
         let insertResponse = await db.collection('apps').insertOne(newItem);
@@ -72,6 +73,7 @@ router.put('/:itemId', async (req, res, next) => {
             url: req.body.url,
             imageUrl: req.body.imageUrl,
             image,
+            group: req.body.group
         },
     };
 
