@@ -130,12 +130,9 @@ export const ItemForm = ({ initialValues, onFormSubmit, onClose, isLoading }) =>
                                 helperText={formik.touched.group && formik.errors.group}
                             />
                         }
-                        onChange={(_, value) => {
-                            console.log(`Change value: ${value}`)
-                            formik.setFieldValue("group", value, true)
-                        }}
+                        onChange={(_, value) => formik.setFieldValue("group", value, true)}
+                        value={formik.values.group ?? ''}
                         onBlur={formik.handleBlur}
-                        value={formik.values.group}
                     />
                     {isLoading && <LinearProgress />}
                 </DialogContent>
