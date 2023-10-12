@@ -88,6 +88,7 @@ mongo:
 - Client specific
   - [React](https://reactjs.org/)
   - [React-Router-Dom](https://reactrouter.com/web/guides/quick-start)
+  - [React-Cookie](https://www.npmjs.com/package/react-cookie)
   - [Redux Toolkit](https://redux-toolkit.js.org/)
     - [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
   - [Material UI](https://mui.com/)
