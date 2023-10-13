@@ -52,7 +52,6 @@ const App = () => {
         })
     }
 
-    // TODO: Store mode in local storage per user
     const theme = useMemo(() => createTheme(getTheme()), [isDarkMode]);
 
     return (
