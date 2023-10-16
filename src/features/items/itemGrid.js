@@ -10,7 +10,11 @@ export const ItemGrid = () => {
     useEffect(() => {
         prefetchItems()
     }, [])
-    const items = useSelector(state => state.items)
+    const itemState = useSelector(state => state.items)
+    const items = itemState.items
+    const groups = itemState.groups
+
+    // TODO: groups map -> container
 
     return (
         <Box m="auto"
