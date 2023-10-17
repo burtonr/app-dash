@@ -19,11 +19,12 @@ const itemsSlice = createSlice({
         builder
             .addMatcher(apiSlice.endpoints.getItems.matchFulfilled, (state, { payload }) => {
                 payload.forEach(resItem => {
-
-                    // TODO: Map groups
-
                     const idx = state.items.findIndex(i => i._id === resItem._id)
                     idx != -1 ? state.items.splice(idx, 1, resItem) : state.items.push(resItem)
+
+                    const gIdx = state.groups.findIndex(i => i === resItem.group)
+                    if (gIdx === -1 && resItem.group)
+                        state.groups.push(resItem.group)
                 });
             })
             .addMatcher(apiSlice.endpoints.updateItem.matchFulfilled, (state, { payload }) => {
@@ -36,9 +37,6 @@ const itemsSlice = createSlice({
                 }
             })
             .addMatcher(apiSlice.endpoints.deleteItem.matchFulfilled, (state, { meta }) => {
-
-                // TODO: If deleteItem was only one with group, remove the group
-
                 const delIdx = state.items.findIndex(x => x._id === meta.originalArgs)
                 state.items.splice(delIdx, 1)
             })
