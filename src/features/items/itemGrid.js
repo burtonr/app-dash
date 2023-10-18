@@ -17,18 +17,30 @@ export const ItemGrid = () => {
     return (
         <Box m="auto"
             display="flex"
-            width="80%"
+            maxWidth="95%"
             alignItems="center"
             justifyContent="center"
-            paddingTop="10px"
+            paddingTop="30px"
         >
             <Grid container
                 direction="row"
+                justifyContent="center"
                 spacing={{ xs: 2, md: 3 }}
                 columns={{ xs: 4, sm: 8, md: 12 }}
             >
                 {groups.map((currentGroup) => (
-                    <Grid spacing={2} item key={currentGroup}>
+                    <Box m={2}
+                        width={300}
+                        height={500}
+                        display="flex"
+                        flexDirection="column"
+                        gap={2}
+                        alignItems="center"
+                        justifyContent="start"
+                        border={1}
+                        borderRadius={2}
+                        key={currentGroup}
+                    >
                         <h3>{currentGroup}</h3>
                         {items
                             .filter(x => x.group === currentGroup)
@@ -37,7 +49,7 @@ export const ItemGrid = () => {
                                     <ItemCard item={currentItem} />
                                 </Stack>
                             ))}
-                    </Grid>
+                    </Box>
                 ))}
             </Grid>
         </Box>
