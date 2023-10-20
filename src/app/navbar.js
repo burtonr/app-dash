@@ -12,18 +12,19 @@ import {
     Typography,
 } from '@mui/material';
 import {
+    Apps,
     Login,
     Logout,
     Menu as MenuIcon,
     PlaylistAdd,
     DarkMode,
     LightMode,
-    Settings,
+    ViewColumn,
     ViewModule,
     AppRegistration
 } from '@mui/icons-material'
 import { useDispatch, useSelector } from "react-redux";
-import { toggleDarkMode, toggleManageMode } from "../features/app/appSlice";
+import { toggleDarkMode, toggleManageMode, toggleGroupMode } from "../features/app/appSlice";
 import { openCreate, openSignIn } from '../features/dialog/dialogSlice'
 import { signOut } from "../features/user/userSlice";
 
@@ -47,12 +48,20 @@ export const Navbar = () => {
         return appSettings.darkMode
     }
 
+    const isGroupMode = () => {
+        return appSettings.groupMode
+    }
+
     const manageClicked = () => {
         dispatch(toggleManageMode())
     }
 
     const addClicked = () => {
         dispatch(openCreate())
+    }
+
+    const groupModeClicked = () => {
+        dispatch(toggleGroupMode())
     }
 
     const signInOutClicked = () => {
@@ -115,6 +124,20 @@ export const Navbar = () => {
         })
     }
 
+    const groupModeItem = () => {
+
+        console.log(`Group mode: ${isGroupMode()}`)
+
+        const itemIcon = isGroupMode() ? <Apps fontSize='small' /> : <ViewColumn fontSize='small' />
+        const itemText = isGroupMode() ? "List" : "Grouped"
+
+        return createMenuItem({
+            clickHandler: groupModeClicked,
+            itemIcon,
+            itemText
+        })
+    }
+
     const signInOutItem = () => {
         if (appSettings.authDisabled)
             return
@@ -150,6 +173,7 @@ export const Navbar = () => {
                     >
                         {isEditor() && addItem()}
                         {isEditor() && manageItem()}
+                        {groupModeItem()}
                         {modeSelectItem()}
                         {signInOutItem()}
                     </Menu>
