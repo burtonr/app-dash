@@ -6,6 +6,10 @@
   "scripts": {
     "start": "node -r dotenv/config server/server.js",
     "start:prod": "node server/server.js",
+    "local:seed": "docker-compose up -d mongo; node test/seeder.mjs",
+    "local:watch": "export MONGO_URI=\"mongodb://mongo:secretPassword@localhost:27017\"; npm run watch",
+    "local:start": "export MONGO_URI=\"mongodb://mongo:secretPassword@localhost:27017\"; npm run start",
+    "local:stop": "docker-compose down",
     "build": "webpack",
     "watch": "webpack --watch --mode=development & nodemon -r dotenv/config server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,8 +40,10 @@
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
+    "@faker-js/faker": "^8.2.0",
     "babel-loader": "^8.2.5",
     "dotenv": "^16.0.1",
+    "inquirer": "^9.2.11",
     "nodemon": "^2.0.18",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
