@@ -75,6 +75,44 @@ mongo:
 
 ## Development
 
+There are `local:` scripts available to start up the MongoDB container, and seed it with _lorem ipsum_ values to aid in development.
+
+---
+
+```
+npm run local:seed
+```
+This script will start the MongoDB container, then prompt for the number of items to add to the database.
+
+> This command can be run multiple times to add more items to the database as desired
+
+There is also a "clear all" option that will remove _all_ items from the local database.
+
+---
+
+```
+npm run local:watch
+```
+This script will set the `MONGO_URI` environment variable to the local MongoDB URI so that you can keep your `.env` file pointed to your personal database while debugging, or testing, features. Then, the script will call the `watch` script.
+
+---
+
+```
+npm run local:start
+```
+Similar to the `local:watch` script, this sets the `MONGO_URI` environment variable to the local MongoDB URI, then calls the `start` script.
+
+---
+
+```
+npm run local:stop
+```
+This script will stop the local MongoDB container (and the app-dash container, if it's running).
+
+> If you have not configured `volumes:` in the `docker-compose.yml` file, all the stored data will be removed.
+
+---
+
 ### Libraries and Packages
 
 - Server specific
@@ -93,3 +131,9 @@ mongo:
   - [Material UI](https://mui.com/)
   - [Formik](https://formik.org/docs/overview)
     - with [Yup](https://github.com/jquense/yup#readme) validation
+- Dev only
+  - [Babel](https://babeljs.io/docs/)
+  - [Webpack](https://webpack.js.org/concepts/)
+  - [nodemon](https://nodemon.io/)
+  - [Faker](https://fakerjs.dev/)
+  - [Inquirer](https://github.com/SBoudrias/Inquirer.js)
