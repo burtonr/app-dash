@@ -125,9 +125,6 @@ export const Navbar = () => {
     }
 
     const groupModeItem = () => {
-
-        console.log(`Group mode: ${isGroupMode()}`)
-
         const itemIcon = isGroupMode() ? <Apps fontSize='small' /> : <ViewColumn fontSize='small' />
         const itemText = isGroupMode() ? "List" : "Grouped"
 
