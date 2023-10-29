@@ -17,7 +17,29 @@ export const ItemGrid = () => {
     const groups = itemState.groups
 
     const renderGroups = () => {
-        return groups.map((currentGroup) => (
+        let ungroupedItems = <Box m={2}
+            width={300}
+            paddingBottom={4}
+            display="flex"
+            flexDirection="column"
+            gap={2}
+            alignItems="center"
+            justifyContent="start"
+            border={1}
+            borderRadius={2}
+            key={'ungrouped'}
+        >
+            <h3>Ungrouped</h3>
+            <Stack key={'ungrouped-stack'} spacing={2}>
+                {items
+                    .filter(x => x.group === '')
+                    .map((currentItem) => (
+                        <ItemCard key={`${currentItem._id}-itemCard`} item={currentItem} />
+                    ))}
+            </Stack>
+        </Box>
+
+        let groupedItems = groups.map((currentGroup) => (
             <Box m={2}
                 width={300}
                 paddingBottom={4}
@@ -32,22 +54,24 @@ export const ItemGrid = () => {
             >
                 <h3>{currentGroup}</h3>
                 <Stack key={`${currentGroup}-stack`} spacing={2}>
-                {items
-                    .filter(x => x.group === currentGroup)
-                    .map((currentItem) => (
-                        <ItemCard key={`${currentItem._id}-itemCard`} item={currentItem} />
-                    ))}
+                    {items
+                        .filter(x => x.group === currentGroup)
+                        .map((currentItem) => (
+                            <ItemCard key={`${currentItem._id}-itemCard`} item={currentItem} />
+                        ))}
                 </Stack>
             </Box>
         ))
+
+        return [ ungroupedItems, ...groupedItems]
     }
 
     const renderItems = () => {
         return items.map((currentItem) => (
-                    <Grid item xs key={currentItem._id}>
-                        <ItemCard item={currentItem} />
-                    </Grid>
-                ))
+            <Grid item xs key={currentItem._id}>
+                <ItemCard item={currentItem} />
+            </Grid>
+        ))
     }
 
     return (

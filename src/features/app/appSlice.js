@@ -11,8 +11,8 @@ const appSlice = createSlice({
     initialState: {
         authDisabled: false,
         manageMode: false,
-        darkMode: false,
-        groupMode: true,
+        darkMode: localStorage.getItem(storageNames.darkMode),
+        groupMode: localStorage.getItem(storageNames.groupMode)
     },
     reducers: {
         toggleManageMode: (state) => {
@@ -20,22 +20,16 @@ const appSlice = createSlice({
         },
         toggleDarkMode: (state) => {
             state.darkMode = !state.darkMode
+            localStorage.setItem(storageNames.darkMode, state.darkMode)
         },
         toggleGroupMode: (state) => {
             state.groupMode = !state.groupMode
+            localStorage.setItem(storageNames.groupMode, state.groupMode)
         }
     },
     extraReducers(builder) {
-        builder.addMatcher(appSlice.actions.toggleDarkMode.match, (state) => {
-            localStorage.setItem(storageNames.darkMode, state.darkMode)
-        })
-        builder.addMatcher(appSlice.actions.toggleGroupMode.match), (state) => {
-            localStorage.setItem(storageNames.groupMode, state.groupMode)
-        }
         builder.addMatcher(apiSlice.endpoints.getSettings.matchFulfilled, (state, { payload }) => {
             state.authDisabled = payload.authDisabled
-            state.darkMode = localStorage.getItem(storageNames.darkMode)
-            state.groupMode = localStorage.getItem(storageNames.groupMode)
         })
     }
 })
