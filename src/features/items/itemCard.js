@@ -19,9 +19,6 @@ export const ItemCard = (item) => {
     const dispatch = useDispatch()
     const [deleteItem, { error }] = useDeleteItemMutation()
     const isManaged = useSelector(state => state.app.manageMode)
-    const getCardHeight = () => {
-        return isManaged ? 125 : 75
-    }
 
     const setAvatar = () => {
         const { image, imageUrl } = data
@@ -50,7 +47,7 @@ export const ItemCard = (item) => {
 
 
     return (
-        <Card variant="outlined" sx={{ width: 275, height: getCardHeight() }}>
+        <Card key={data._id} variant="outlined" sx={{ width: 275 }}>
             <CardActionArea
                 target="_blank"
                 href={data.url}
@@ -62,7 +59,7 @@ export const ItemCard = (item) => {
                     avatar={setAvatar()}
                 />
             </CardActionArea>
-            {isManaged ? <CardActions disableSpacing >
+            {isManaged ? <CardActions disableSpacing sx={{ padding: 0, justifyContent: 'end' }} >
                 <IconButton color={'secondary'} aria-label="edit" onClick={() => editItemClicked(data)}>
                     <Edit />
                 </IconButton>
