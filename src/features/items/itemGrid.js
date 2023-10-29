@@ -31,7 +31,7 @@ export const ItemGrid = () => {
                 {groups.map((currentGroup) => (
                     <Box m={2}
                         width={300}
-                        height={500}
+                        paddingBottom={4}
                         display="flex"
                         flexDirection="column"
                         gap={2}
@@ -42,13 +42,13 @@ export const ItemGrid = () => {
                         key={currentGroup}
                     >
                         <h3>{currentGroup}</h3>
+                        <Stack key={`${currentGroup}-stack`} spacing={2}>
                         {items
                             .filter(x => x.group === currentGroup)
                             .map((currentItem) => (
-                                <Stack spacing={6}>
-                                    <ItemCard item={currentItem} />
-                                </Stack>
+                                <ItemCard key={`${currentItem._id}-itemCard`} item={currentItem} />
                             ))}
+                        </Stack>
                     </Box>
                 ))}
             </Grid>
